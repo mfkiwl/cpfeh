@@ -1,0 +1,33 @@
+#!/usr/local/bin/dyalogscript MAXWS=1G
+
+⎕IO←1 ⋄ ⎕RL←1
+⎕FX⊃⎕NGET'APLSource/MATERIAL.aplf'1
+⎕FX⊃⎕NGET'APLSource/CPFEH.aplf'1
+
+n←250                                ⍝ units
+bcc←'materials/fe_bcc.json5'         ⍝ bcc iron
+fcc←'materials/fe_fcc.json5'         ⍝ fcc iron
+iu←?n⍴≢m←MATERIAL¨bcc fcc            ⍝ materials
+ea vol←{(2×○?3⍴⊂⍵⍴0)((⊢÷+/)?⍵⍴0)}n   ⍝ texture
+vuvd←{(⍳3){(⊢÷⍤1 0+/)4+?⍵}¨⊂⍵ ⍵⍴0}n  ⍝ topology
+
+b←0 1 1 0 0 0                        ⍝ stresses
+e←1e¯3,5⍴0                           ⍝ strain rate
+w←0                                  ⍝ angular velocity
+s←6⍴0                                ⍝ stress
+tol←1e¯3                             ⍝ tolerance
+max←500                              ⍝ max iterations
+
+SIM←{
+    ⍺←⍬ ⋄ o n t←⍵ ⋄ ea1←o↑¨ea ⋄ vol1 iu1←o↑¨vol iu ⋄ vuvd1←o o∘↑¨vuvd
+    z←12⎕DT⊂⎕TS ⋄ r ea1 f←m vuvd1 iu1 vol1 ea1 tol max CPFEH n t b e w s
+    _←(↓[1]r)(ea1,⊂vol1)(,f)⎕CSV⍠'IfExists' 'Replace'¨⍣(~0∊⍴⍺)⊢⍺
+    ⍺,⍨(¯9↑⍕)¨⍵,1e3÷⍨z-⍨12⎕DT⊂⎕TS
+}
+
+⎕←SIM  50 10 0.05
+⎕←SIM 100 10 0.05
+⎕←SIM 150 10 0.05
+⎕←SIM 200 10 0.05
+⎕←SIM 250 10 0.05
+⎕←'r.csv' 'ea.csv' 'f.csv'SIM 50 1000 0.05
