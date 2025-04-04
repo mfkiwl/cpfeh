@@ -16,3 +16,4 @@ Expected output:
            250         10       0.05     21.864
             50       1000       0.05    626.796  r.csv  ea.csv  f.csv
 
+Timings (in the fourth column) may vary.
