@@ -1,5 +1,0 @@
- VOCEMAT←{
-     VOCE←{t1 T0 T1←1↓⍺⍺ ⋄ (T1×⍵)-(T1×e×(d×1+f×⍺+⍵)-1+f×⍺)+(T1-⍨f×t1)×(e←(*-f×⍺)÷f)×1-⍨d←*-⍵×f←|T0÷t1}
-     j←0 ⎕JSON⍠'Dialect' 'JSON5'⊃⎕NGET ⍵ ⋄ m←⎕NS ⍬ ⋄ m.(e hs k ss)←1 j.ns(⌹↑j.c)(j.n∘.×⍥(⊢÷(÷2)*⍨+.×⍨)j.b)
-     m.ts←⊃⊣/j.voce ⋄ m.HARD←⊣j.voce VOCE(↑j.hlat)+.×∘|⊢ ⋄ m
- }

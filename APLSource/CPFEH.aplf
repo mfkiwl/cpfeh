@@ -34,14 +34,14 @@
          ∆1←bu+.×x1∘←∆s+j⌹⍨∆e ⋄ ∆2←(j+jiu)↓[1]⍤(⌹⍨⍤¯1)⍥(↑[÷2])x2∘←(e-eu)+jiu+.×s-su
          x1 x2∘←⌈/⍤|¨x1(⌈/⍤|¨x2) ⋄ su+←⊃(r1∘←r1 ⍺⍺ x2 y2)(r2∘←r2 ⍺⍺ x1 y1)+.×∆1 ∆2 ⋄ su bu esu
      }⍣{i+←1 ⋄ r←(max=i)∨tol∧.>x1 x2÷⌈/|t×vo ⋄ y1∘←x1 ⋄ y2∘←x2 ⋄ r}∘{i∘←0 ⋄ ⍵}
-     H←{o e←⍵ ⋄ o(⍺.HARD)e}
      D←{
          t bo vo wo so au bu←⍵ ⋄ r1 y1 x1 r2 y2 x2∘←1 ⋄ so-←bo×(vu+.×⍨↑au)-so
          su bu esu←(bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu)S(=⍨au)bu ⍬
-         tsu+←m H¨↓⍉↑osu(t×esu) ⋄ osu+←t×|esu ⋄ fu∘←(i3+t×,⌿(⊃+/)¨ssu×⍤2 0⊢esu)+.×fu
-         ru W←esu ⋄ su bu s e i
+         tsu+←m.(⊃H/)↓⍉↑osu(t×esu) ⋄ osu+←t×|esu ⋄ fu+.×⍨←i3+t×,⌿(⊃+/)¨ssu×⍤2 0⊢esu ⋄ ru W←esu
+         su bu s e i
      }
-     m vuvd iu vol ea tol max←⍺ ⋄ n t bo vo wo so←⍵ ⋄ osu←≠⍨tsu←m.ts ⋄ fu←i3×⊂1⍴⍨≢vol
+     m vuvd iu vol ea tol max←⍺ ⋄ n t bo vo wo so←⍵ ⋄ osu←≠⍨tsu←m.z ⋄
+     fu←i3×⊂1⍴⍨≢vol
      vuvd iu vu ru←{(⍵∘{⍵[⍺;⍺]}¨(⊢÷⍤1 0+/)¨vuvd)(iu[⍵])((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}⍋iu
      ku ssu←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu←+V ssu
      at←0 ⋄ as←ae←6⍴0 ⋄ r←1 14⍴0 ⋄ r(E ru)fu⊣{

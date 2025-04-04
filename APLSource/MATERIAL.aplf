@@ -1,0 +1,6 @@
+ MATERIAL←{
+     VOCE←{a b c←1↓⍺⍺ ⋄ (c×⍵)-(c×e×(d×1+f×⍺+⍵)-1+f×⍺)+(c-⍨f×a)×(e←(*-f×⍺)÷f)×1-⍨d←*-⍵×f←|b÷a}
+     j←0 ⎕JSON⍠'Dialect' 'JSON5'⊃⎕NGET ⍵ ⋄ m n b←{(,/(≢∘⊃¨⍵.n)⍴¨⍳≢⍵),⊃,¨¨/⍵.(n b)}j.SlipSystems
+     h←j.Hardening[m] ⋄ s←⎕NS ⍬ ⋄ s.(e hs k ss)←1 h.sr(⌹↑j.Stiffness)(n∘.×⍥(⊢÷(÷2)*⍨+.×⍨)b)
+     s.z←⊃¨h.voce ⋄ s.H←⊣(↓⍉↑h.voce)VOCE(↑{⍵.lat[m]}¨h)+.×∘|⊢ ⋄ s
+ }
