@@ -22,7 +22,7 @@ SIM←{
     ⍺←⍬ ⋄ o n t←⍵ ⋄ ea1←o↑¨ea ⋄ vol1 iu1←o↑¨vol iu ⋄ vuvd1←o o∘↑¨vuvd
     z←12⎕DT⊂⎕TS ⋄ r ea1 f←m vuvd1 iu1 vol1 ea1 tol max CPFEH n t b e w s
     _←(↓[1]r)(ea1,⊂vol1)(,f)⎕CSV⍠'IfExists' 'Replace'¨⍣(~0∊⍴⍺)⊢⍺
-    ⍺,⍨(¯9↑⍕)¨⍵,1e3÷⍨z-⍨12⎕DT⊂⎕TS
+    ⍺,⍨10 ¯4∘⍕¨⍵,1e3÷⍨z-⍨12⎕DT⊂⎕TS
 }
 
 ⎕←SIM  50 10 0.05
