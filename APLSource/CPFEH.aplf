@@ -31,7 +31,7 @@
          su bu _←⍵ ⋄ esu ju←U au+su
          bu jiu j←⍺ ju C bu ⍬ ⋄ jiu←(i6-↓[1]+.×∘⌹vu+.×i6-⍤2⊢)jiu
          ∆s ∆e←bo(~bo)×so(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu←(su+.×⍨,⌿ku)+t×,⌿(⊃+/)¨msu×⍤1 0⊢esu)
-         ∆1←bu+.×x1∘←∆s+j⌹⍨∆e ⋄ ∆2←(j+jiu)↓[1]⍤(⌹⍨⍤¯1)⍥(↑[÷2])x2∘←(e-eu)+jiu+.×s-su
+         ∆1←bu+.×j⌹⍨x1∘←∆e+j+.×∆s ⋄ ∆2←(j+jiu)↓[1]⍤(⌹⍨⍤¯1)⍥(↑[÷2])x2∘←(e-eu)+jiu+.×s-su
          x1 x2∘←⌈/⍤|¨x1(⌈/⍤|¨x2) ⋄ su+←⊃(r1∘←r1 ⍺⍺ x2 y2)(r2∘←r2 ⍺⍺ x1 y1)+.×∆1 ∆2 ⋄ su bu esu
      }⍣{i+←1 ⋄ r←(max=i)∨tol∧.>x1 x2÷⌈/|t×vo ⋄ y1∘←x1 ⋄ y2∘←x2 ⋄ r}∘{i ic∘←0 ⋄ ⍵}
      D←{
