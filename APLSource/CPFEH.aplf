@@ -1,5 +1,4 @@
  CPFEH←{
-     down up inc dec←0.25 0.75 1.5 2
      i3 i6←∘.=⍨∘⍳¨3 6 ⋄ bd←(⊂i6)×⍤1¨(2 0 0 1 0 1)(0 2 0 1 1 0)(0 0 2 0 1 1)÷2
      M←{
          A B C a b c←,1 2∘.○⍵
@@ -28,7 +27,7 @@
          w3←3 3⍴0 1 ¯1 1 0 ¯1 1 ¯1 0×(0,⍨(3↓t×,⌿(⊃+/)¨(-_S ssu)×⍤1 0⊢⍵)-⍺+.×wo+.×⍉⍺)[9⍴⌽⍳4]
          ⍺+.×i3+(ww×1○wu)+ww+.×(ww←w3÷wu)×1-2○wu←(÷2)*⍨+/1 1⍉w3←↑{0.5×⍵×3-+.×⍨⍵}¨↓w3
      }
-     S←{down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{
+     S←{down up inc dec←conv ⋄ down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{
          su bu _ st←⍵ ⋄ esu ju←U au+su ⋄ bu jv j←⍺ ju C bu ⍬ ⋄ jv←(i6-↓[1]+.×∘⌹vu+.×i6-⍤2⊢)jv
          ∆s ∆e←bo(~bo)×st(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu←(su+.×⍨,⌿ku)+t×,⌿(⊃+/)¨msu×⍤1 0⊢esu)
          ∆←∆e+j+.×∆s ⋄ ∆u←(e-eu)+jv+.×s-su ⋄ x xu∘←⌈/⍤|¨∆(⌈/⍤|¨∆u) ⋄ d⍺⍺¨←(xu yu)(x y)
@@ -40,7 +39,7 @@
          tsu+←m.(⊃H/)↓⍉↑osu(t×esu) ⋄ osu+←t×|esu ⋄ fu+.×⍨←i3+t×,⌿(⊃+/)¨ssu×⍤2 0⊢esu ⋄ ru W←esu
          su bu s e i ic
      }
-     m vuvd iu vol ea tol max←⍺ ⋄ n t bo vo wo so←⍵ ⋄ osu←≠⍨tsu←m.z ⋄ fu←i3×⊂1⍴⍨≢vol
+     m vuvd iu vol ea tol max conv←⍺ ⋄ n t bo vo wo so←⍵ ⋄ osu←≠⍨tsu←m.z ⋄ fu←i3×⊂1⍴⍨≢vol
      vuvd iu vu ru←{(⍵∘{⍵[⍺;⍺]}¨(⊢÷⍤1 0+/)¨vuvd)(iu[⍵])((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}⍋iu
      ku ssu←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu←+_S ssu
      at←0 ⋄ as←ae←6⍴0 ⋄ r←1 15⍴0 ⋄ r(E ru)fu⊣{
