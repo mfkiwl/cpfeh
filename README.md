@@ -3,17 +3,20 @@
 Crystal Plasticity Finite Element Homogenization model for
 [Dyalog APL](https://www.dyalog.com/)
 
-Example:
+## Example
 
     eg.apls
 
 Expected output:
 
-     5.000E1     1.000E1     5.000E¯2    2.818E0
-     1.000E2     1.000E1     5.000E¯2    4.412E0
-     1.500E2     1.000E1     5.000E¯2    8.546E0
-     2.000E2     1.000E1     5.000E¯2    1.266E1
-     2.500E2     1.000E1     5.000E¯2    2.321E1
-     5.000E1     1.000E3     5.000E¯2    6.246E2     r.csv  ea.csv  f.csv
+        grains      steps       ∆time       iter        iterc       seconds
+            50          10   5.00E¯2           440         447        2.03
+           100          10   5.00E¯2           510         518        3.46
+           150          10   5.00E¯2           580         587        6.80
+           200          10   5.00E¯2           640         647        9.87
+           250          10   5.00E¯2           740         747       16.69
+            50         100   5.00E¯2          8000        8007       42.60
+            50         500   5.00E¯2         43500       43507      220.02
+            50        1000   5.00E¯2         94000       94007      539.99   r.csv  tex.csv  f.csv
 
-Timings (in the fourth column) may vary.
+Timings (in the last column) may vary.
