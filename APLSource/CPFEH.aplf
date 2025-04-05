@@ -29,14 +29,14 @@
          ⍺+.×i3+(ww×1○wu)+ww+.×(ww←w3÷wu)×1-2○wu←(÷2)*⍨+/1 1⍉w3←↑{0.5×⍵×3-+.×⍨⍵}¨↓w3
      }
      S←{down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{
-         su bu _←⍵ ⋄ esu ju←U au+su ⋄ bu jv j←⍺ ju C bu ⍬ ⋄ jv←(i6-↓[1]+.×∘⌹vu+.×i6-⍤2⊢)jv
-         ∆s ∆e←bo(~bo)×so(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu←(su+.×⍨,⌿ku)+t×,⌿(⊃+/)¨msu×⍤1 0⊢esu)
+         su bu _ st←⍵ ⋄ esu ju←U au+su ⋄ bu jv j←⍺ ju C bu ⍬ ⋄ jv←(i6-↓[1]+.×∘⌹vu+.×i6-⍤2⊢)jv
+         ∆s ∆e←bo(~bo)×st(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu←(su+.×⍨,⌿ku)+t×,⌿(⊃+/)¨msu×⍤1 0⊢esu)
          ∆←∆e+j+.×∆s ⋄ ∆u←(e-eu)+jv+.×s-su ⋄ x xu∘←⌈/⍤|¨∆(⌈/⍤|¨∆u) ⋄ d⍺⍺¨←(xu yu)(x y)
-         (su+⊃d+.×(bu+.×j⌹⍨∆)((j+jv)↓[1]⍤(⌹⍨⍤¯1)⍥(↑[÷2])∆u))bu esu
+         (su+⊃d+.×(bu+.×j⌹⍨∆)((j+jv)↓[1]⍤(⌹⍨⍤¯1)⍥(↑[÷2])∆u))bu esu st
      }⍣{i+←1 ⋄ r←(max=i)∨tol∧.>x xu÷⌈/|t×vo ⋄ y yu∘←x xu ⋄ r}∘{d y yu∘←1 ⋄ i ic∘←0 ⋄ ⍵}
      D←{
-         t bo vo wo so au bu←⍵ ⋄ so-←bo×(vu+.×⍨↑au)-so
-         su bu esu←(bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu)S(=⍨au)bu ⍬
+         t bo vo wo so au bu←⍵ ⋄ st←so-bo×(vu+.×⍨↑au)-so
+         su bu esu _←(bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu)S(=⍨au)bu⍬st
          tsu+←m.(⊃H/)↓⍉↑osu(t×esu) ⋄ osu+←t×|esu ⋄ fu+.×⍨←i3+t×,⌿(⊃+/)¨ssu×⍤2 0⊢esu ⋄ ru W←esu
          su bu s e i ic
      }
