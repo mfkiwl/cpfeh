@@ -1,35 +1,35 @@
  CPFEH←{
+     ⍝ Symmetric (⍺⍺←+) or antisymmetric (⍺⍺←-) 3 3-tensor as 6-vector
      _S←{((⊃¨((2⍴¨⍳3),(2 3)(1 3)(1 2))⌷¨⊂)2÷⍨⍺⍺∘⍉⍨)⍤2⊢⍵}
-     
+     ⍝ Matrix rotation (3 3) from Euler angles (3)
      M←{
          A B C a b c←,1 2∘.○⍵
-         3 3⍴((a×c)-b×A×C)(-(a×C)+b×c×A)(A×B)((c×A)+a×b×C)((a×b×c)-A×C)(-a×B)(B×C)(c×B)b
-     }
+         3 3⍴((a×c)-b×A×C)(-(a×C)+b×c×A)(A×B)((c×A)+a×b×C)((a×b×c)-A×C)(-a×B)(B×C)(c×B)b}
+     ⍝ Fill vector ⍺ of 6 6 rotation matrix ⍵ from 3 3 matrix ⍺⍺
      _V←{
          i j←(2 1 1)(3 3 2) ⋄ r←⍵ ⋄ r[⍳3;⍺]←×⍨⍺⍺[⍺;⍳3]
          r[⍺;3+⍳3]←2*⍺⍺[i;⍺]×⍺⍺[j;⍺] ⋄ r[3+⍳3;⍺]←⍺⍺[⍺;i]×⍺⍺[⍺;j]
-         r[3+⍳3;3+⍺]←⍺⍺[i[⍺];i]×⍺⍺[j[⍺];j]+⍺⍺[j[⍺];i]×⍺⍺[i[⍺];j] ⋄ r
-     }
+         r[3+⍳3;3+⍺]←⍺⍺[i[⍺];i]×⍺⍺[j[⍺];j]+⍺⍺[j[⍺];i]×⍺⍺[i[⍺];j] ⋄ r}
+     ⍝ Rotation matrix 6 6 from 3 3 matrix
      R←{⊃⍵ _V/(⍳3),⊂6 6⍴≠⍨⊃⍵}{(⍺⍺⍉⍺)+.×⍵+.×(⊃⍪⌿,/3 3∘⍴¨2 2⍴1 0.5 2 1)∘×⍺⍺ ⍺}
+     ⍝ Euler angles (3) from rotation matrix (3 3)
      E←{
          p2←(¯3○⍵[3;1]÷⍥(b∘/⊃)⍵[3;2])@((b←⊃0.9999>⍵[3;3])⍨)≠⍨p←¯2○⊃⍵[3;3]
-         p1←¯3○(-⍵[1;3]÷⍥(b∘/⊃)⍵[2;3])@(b⍨)(⍵[2;1]÷⍥((~b)∘/⊃)⍵[1;1])@(~b⍨)p ⋄ p1 p p2
-     }
+         p1←¯3○(-⍵[1;3]÷⍥(b∘/⊃)⍵[2;3])@(b⍨)(⍵[2;1]÷⍥((~b)∘/⊃)⍵[1;1])@(~b⍨)p ⋄ p1 p p2}
+     ⍝ Rotate 3 3 rotation matrices ⍺ with slip shear ⍵ (by slip plane and grain)
      W←{
          w3←3 3⍴0 1 ¯1 1 0 ¯1 1 ¯1 0×(0,⍨(3↓t×,⌿(⊃+/)¨(-_S ssu)×⍤1 0⊢⍵)-⍺+.×wo+.×⍉⍺)[9⍴⌽⍳4]
-         ⍺+.×i3+(ww×1○wu)+ww+.×(ww←w3÷wu)×1-2○wu←(÷2)*⍨+/1 1⍉w3←↑{0.5×⍵×3-+.×⍨⍵}¨↓w3
-     }
-
+         ⍺+.×i3+(ww×1○wu)+ww+.×(ww←w3÷wu)×1-2○wu←(÷2)*⍨+/1 1⍉w3←↑{0.5×⍵×3-+.×⍨⍵}¨↓w3}
+     ⍝ Return slip shear and compliance of each grain for grain stresses ⍵
      U←{
          esu←m.e×(××m.hs*⍨|)rsu←(msu÷⍤1 0⊢tsu)+.×⍤1⊂¨iu⊆[1]↑[÷2]⍵
-         ju←,⌿ku+t×(⊃+/)¨(tsu÷⍨⍤0 2∘.×⍤1⍨msu)×⍤2 0⊢m.hs×m.e×(××(m.hs-1)*⍨|)rsu ⋄ esu ju
-     }
-
+         ju←,⌿ku+t×(⊃+/)¨(tsu÷⍨⍤0 2∘.×⍤1⍨msu)×⍤2 0⊢m.hs×m.e×(××(m.hs-1)*⍨|)rsu ⋄ esu ju}
+     ⍝ Self-consistent method to get localisation, interaction and global compliance tensors
      C←{
          bd ju←⍺ ⋄ j←vu+.×⍨↑ju+.×⊃⍵ ⋄ biu∘←+⌿(↑bd)+.×⍤2⊢vuvd∘.(+.×)i6-⊃⍵
          bu←(↓[1]+.×∘⌹vu+.×⊢)(↑[÷2]ju){(j+⍵)⌹⍨↑j+⍺}⍤2⊢jv←{j+.×⍵⌹i6-⍵}⍤2↑[÷2]biu ⋄ bu jv j
      }⍣{i1 ic+←1 ⋄ (max=i1)∨tol>w∘←⌈/∊|⍺(-÷⌈⍥|)⍥⊃⍵}∘{i1∘←0 ⋄ ⍵}
-
+     ⍝ Calculate grain stresses, localisation tensors, slip systems shear and target stress
      S←{down up inc dec←conv ⋄ down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{
          su bu _ st←⍵ ⋄ esu ju←U au+su ⋄ bu jv j←⍺ ju C bu ⍬ ⋄ jv←(i6-↓[1]+.×∘⌹vu+.×i6-⍤2⊢)jv
          ∆s ∆e←bo(~bo)×st(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu←(su+.×⍨,⌿ku)+t×,⌿(⊃+/)¨msu×⍤1 0⊢esu)
@@ -37,13 +37,14 @@
          (su+⊃d+.×(bu+.×j⌹⍨∆)((j+jv)↓[1]⍤(⌹⍨⍤¯1)⍥(↑[÷2])∆u))bu esu st
      }⍣{i+←1 ⋄ y yu∘←x xu ⋄ (max=i)∨tol∧.>x xu÷xo}∘{d y yu∘←1 ⋄ i ic∘←0 ⋄ xo∘←⌈/|t×vo ⋄ ⍵}
 
+     ⍝ Initialise and run simulation updating microstructure each step
      i3 i6←∘.=⍨∘⍳¨3 6 ⋄ bd←(⊂i6)×⍤1¨(2 0 0 1 0 1)(0 2 0 1 1 0)(0 0 2 0 1 1)÷2
      tol max←⍺⍺ ⋄ conv←⍵⍵ ⋄ n t bo vo wo so←⍺ ⋄ mat ea area vol←⍵ ⋄ m←∪mat
      iu vuvd vu ru←{⍺[⍵](⍵∘{⍵[⍺;⍺]}¨(⊢÷⍤1 0+/)¨area)((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}∘⍋⍨⍳⍨mat
      ku ssu←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu←+_S ssu
-     at←0 ⋄ as←ae←6⍴0 ⋄ osu←≠⍨tsu←m.z ⋄ fu←i3×⊂1⍴⍨≢vol ⋄ r←1 15⍴0 ⋄ r(E ru)fu⊣{
+     as←ae←6⍴at←0 ⋄ asu←≠⍨tsu←m.z ⋄ fu←i3×⊂1⍴⍨≢vol ⋄ r←1 15⍴0 ⋄ r(E ru)fu⊣{
          au bu←⍵ ⋄ su bu esu _←(bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu)S(=⍨au)bu ⍬(so-bo×(vu+.×⍨↑au)-so)
-         tsu+←m.(⊃H/)↓⍉↑osu(t×esu) ⋄ osu+←t×|esu ⋄ fu+.×⍨←i3+t×,⌿(⊃+/)¨ssu×⍤2 0⊢esu ⋄ ru W←esu
+         tsu+←m.(⊃H/)↓⍉↑asu(t×esu) ⋄ asu+←t×|esu ⋄ fu+.×⍨←i3+t×,⌿(⊃+/)¨ssu×⍤2 0⊢esu ⋄ ru W←esu
          at au as ae+←t su s e ⋄ r⍪←at,ae,as,i,ic ⋄ au bu
      }⍣n⊢(au←↓6(≢vol)⍴0)(i6×⊂(≢vol)⍴÷2)
  }
