@@ -38,13 +38,12 @@
      }⍣{i+←1 ⋄ y yu∘←x xu ⋄ (max=i)∨tol∧.>x xu÷xo}∘{d y yu∘←1 ⋄ i ic∘←0 ⋄ xo∘←⌈/|t×vo ⋄ ⍵}
 
      i3 i6←∘.=⍨∘⍳¨3 6 ⋄ bd←(⊂i6)×⍤1¨(2 0 0 1 0 1)(0 2 0 1 1 0)(0 0 2 0 1 1)÷2
-     m vuvd iu vol ea tol max conv←⍺ ⋄ n t bo vo wo so←⍵ ⋄ osu←≠⍨tsu←m.z ⋄ fu←i3×⊂1⍴⍨≢vol
-     vuvd iu vu ru←{(⍵∘{⍵[⍺;⍺]}¨(⊢÷⍤1 0+/)¨vuvd)(iu[⍵])((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}⍋iu
+     tol max←⍺⍺ ⋄ conv←⍵⍵ ⋄ n t bo vo wo so←⍺ ⋄ mat ea area vol←⍵ ⋄ m←∪mat
+     iu vuvd vu ru←{⍺[⍵](⍵∘{⍵[⍺;⍺]}¨(⊢÷⍤1 0+/)¨area)((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}∘⍋⍨⍳⍨mat
      ku ssu←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu←+_S ssu
-     at←0 ⋄ as←ae←6⍴0 ⋄ r←1 15⍴0 ⋄ r(E ru)fu⊣{
+     at←0 ⋄ as←ae←6⍴0 ⋄ osu←≠⍨tsu←m.z ⋄ fu←i3×⊂1⍴⍨≢vol ⋄ r←1 15⍴0 ⋄ r(E ru)fu⊣{
          au bu←⍵ ⋄ su bu esu _←(bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu)S(=⍨au)bu ⍬(so-bo×(vu+.×⍨↑au)-so)
          tsu+←m.(⊃H/)↓⍉↑osu(t×esu) ⋄ osu+←t×|esu ⋄ fu+.×⍨←i3+t×,⌿(⊃+/)¨ssu×⍤2 0⊢esu ⋄ ru W←esu
          at au as ae+←t su s e ⋄ r⍪←at,ae,as,i,ic ⋄ au bu
      }⍣n⊢(au←↓6(≢vol)⍴0)(i6×⊂(≢vol)⍴÷2)
  }
- 

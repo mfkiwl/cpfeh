@@ -4,15 +4,15 @@
 ⎕FX⊃⎕NGET'APLSource/MATERIAL.aplf'1
 ⎕FX⊃⎕NGET'APLSource/CPFEH.aplf'1
 
-n←250                                ⍝ units
+n←250                                ⍝ count
 bcc←'materials/fe_bcc.json5'         ⍝ bcc iron
 fcc←'materials/fe_fcc.json5'         ⍝ fcc iron
-iu←?n⍴≢m←MATERIAL¨bcc fcc            ⍝ materials
+mat←?n⍴≢m←MATERIAL¨bcc fcc           ⍝ material
 ea vol←{(2×○?3⍴⊂⍵⍴0)((⊢÷+/)?⍵⍴0)}n   ⍝ texture
-vuvd←{(⍳3){(⊢÷⍤1 0+/)4+?⍵}¨⊂⍵ ⍵⍴0}n  ⍝ topology
+area←{(⍳3){(⊢÷⍤1 0+/)4+?⍵}¨⊂⍵ ⍵⍴0}n  ⍝ topology
 
 b←0 1 1 0 0 0                        ⍝ stresses
-e←1e¯3,5⍴0                           ⍝ strain rate
+r←1e¯3,5⍴0                           ⍝ strain rate
 w←0                                  ⍝ angular velocity
 s←6⍴0                                ⍝ stress
 tol←1e¯3                             ⍝ tolerance
@@ -21,9 +21,9 @@ conv←0.1 0.9 1.25 1.5                ⍝ down up inc dec
 
 I←9 0∘⍕ ⋄ D←9 2∘⍕ ⋄ S←9 ¯3∘⍕ ⍝ integer decimal scientific
 SIM←{
-    ⍺←⍬ ⋄ o n t←⍵ ⋄ ea1←o↑¨ea ⋄ vol1 iu1←o↑¨vol iu ⋄ vuvd1←o o∘↑¨vuvd
-    r ea1 f←m vuvd1 iu1 vol1 ea1 tol max conv CPFEH n t b e w s⊣ts←⎕TS
-    _←(↓[1]r)(ea1,⊂vol1)(,f)⎕CSV⍠'IfExists' 'Replace'¨⍣(~0∊⍴⍺)⊢⍺
+    ⍺←⍬ ⋄ o n t←⍵ ⋄ e←o↑¨ea ⋄ v i←o↑¨vol mat ⋄ a←o o∘↑¨area
+    r e f←n t b r w s(tol max CPFEH conv)m[i]e a v⊣ts←⎕TS
+    _←(↓[1]r)(e,⊂v)(,f)⎕CSV⍠'IfExists' 'Replace'¨⍣(~0∊⍴⍺)⊢⍺
     ⍺,⍨10↑¨(2(I¨⍤↑,S¨⍤↓)⍵),(I¨+⌿¯2↑[2]r),⊂D 1e3÷⍨⎕TS-⍥(12⎕DT⊂)ts
 }
 
