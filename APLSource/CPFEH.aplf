@@ -1,33 +1,33 @@
  CPFEH←{
-     _V←{((⊃¨((2⍴¨⍳3),(2 3)(1 3)(1 2))⌷¨⊂)2÷⍨⍺⍺∘⍉⍨)⍤2⊢⍵}                                       ⍝ voigt vec from matrix
-     M←{ A B C a b c←,1 2∘.○⍵                                                                  ⍝ matrix from euler angles
-         3 3⍴((a×c)-b×A×C)(-(a×C)+b×c×A)(A×B)((c×A)+a×b×C)((a×b×c)-A×C)(-a×B)(B×C)(c×B)b}
-     E←{ p2←(¯3○⍵[3;1]÷⍥(b∘/⊃)⍵[3;2])@((b←⊃0.9999>⍵[3;3])⍨)≠⍨p←¯2○⊃⍵[3;3]                      ⍝ euler angles from matrix
+     _V←{((⊃¨((2⍴¨⍳3),(2 3)(1 3)(1 2))⌷¨⊂)2÷⍨⍺⍺∘⍉⍨)⍤2⊢⍵}                                     ⍝ voigt vec from matrix
+     M←{ a b c d e f←,1 2∘.○⍵                                                                ⍝ matrix from euler angles
+         3 3⍴((d×f)-e×a×c)(-(d×c)+e×f×a)(a×b)((f×a)+d×e×c)((d×e×f)-a×c)(-d×b)(b×c)(f×b)e}
+     E←{ p2←(¯3○⍵[3;1]÷⍥(b∘/⊃)⍵[3;2])@((b←⊃0.9999>⍵[3;3])⍨)≠⍨p←¯2○⊃⍵[3;3]                    ⍝ euler angles from matrix
          p1←¯3○(-⍵[1;3]÷⍥(b∘/⊃)⍵[2;3])@(b⍨)(⍵[2;1]÷⍥((~b)∘/⊃)⍵[1;1])@(~b⍨)p ⋄ p1 p p2}
-     R←{ i j←(2 1 1)(3 3 2) ⋄ r w←⍵ ⋄ r[⍳3;⍺]←×⍨w[⍺;⍳3]                                        ⍝ rotate voigt vec or matrix
+     R←{ i j←(2 1 1)(3 3 2) ⋄ r w←⍵ ⋄ r[⍳3;⍺]←×⍨w[⍺;⍳3]                                      ⍝ rotate voigt vec or matrix
          r[⍺;3+⍳3]←2*w[i;⍺]×w[j;⍺] ⋄ r[3+⍳3;⍺]←w[⍺;i]×w[⍺;j]
          r[3+⍳3;3+⍺]←w[i[⍺];i]×w[j[⍺];j]+w[j[⍺];i]×w[i[⍺];j] ⋄ r w
      }{⊃⊃⍺⍺/(⍳3),⊂(6 6⍴≠⍨⊃⍵)⍵}{(⍺⍺⍉⍺)+.×⍵+.×(⊃⍪⌿,/3 3∘⍴¨2 2⍴1 0.5 2 1)∘×⍺⍺ ⍺}
-     W←{ w3←3 3⍴0 1 ¯1 1 0 ¯1 1 ¯1 0×(0,⍨(3↓t×,⌿(⊃+/)¨(-_V ssu)×⍤1 0⊢⍵)-⍺+.×wo+.×⍉⍺)[9⍴⌽⍳4]    ⍝ rotate orientation matrices
-         ⍺+.×i3+(ww×1○wu)+ww+.×(ww←w3÷wu)×1-2○wu←(÷2)*⍨+/1 1⍉w3←↑{0.5×⍵×3-+.×⍨⍵}¨↓w3}
-     U←{ esu←m.e×(××m.hs*⍨|)rsu←(msu÷⍤1 0⊢tsu)+.×⍤1⊂¨iu⊆[1]↑[÷2]⍵                              ⍝ unit shear anc compliance
+     W←{ w←0 1 ¯1 1 0 ¯1 1 ¯1 0×(0,⍨(3↓t×,⌿(⊃+/)¨(-_V ssu)×⍤1 0⊢⍵)-⍺+.×wo+.×⍉⍺)[9⍴⌽⍳4]       ⍝ rotate orientation matrices
+         ⍺+.×i3+(w×1○u)+w+.×(w←w÷u)×1-2○u←(÷2)*⍨+/1 1⍉w←↑{0.5×⍵×3-+.×⍨⍵}¨↓3 3 ⍴w}
+     U←{ esu←m.e×(××m.hs*⍨|)rsu←(msu÷⍤1 0⊢tsu)+.×⍤1⊂¨iu⊆[1]↑[÷2]⍵                            ⍝ unit shear anc compliance
          ju←,⌿ku+t×(⊃+/)¨(tsu÷⍨⍤0 2∘.×⍤1⍨msu)×⍤2 0⊢m.hs×m.e×(××(m.hs-1)*⍨|)rsu ⋄ esu ju}
-     C←{ bd ju←⍺ ⋄ j←vu+.×⍨↑ju+.×⊃⍵ ⋄ biu∘←+⌿(↑bd)+.×⍤2⊢vuvd∘.(+.×)i6-⊃⍵                       ⍝ self-consistent interaction
+     C←{ bd ju←⍺ ⋄ j←vu+.×⍨↑ju+.×⊃⍵ ⋄ biu∘←+⌿(↑bd)+.×⍤2⊢vuvd∘.(+.×)i6-⊃⍵                     ⍝ self-consistent interaction
          bu←(↓[1]+.×∘⌹vu+.×⊢)(↑[÷2]ju){(j+⍵)⌹⍨↑j+⍺}⍤2⊢jv←{j+.×⍵⌹i6-⍵}⍤2↑[÷2]biu ⋄ bu jv j
      }⍣{i1 ic+←1 ⋄ (max=i1)∨tol>w∘←⌈/∊|⍺(-÷⌈⍥|)⍥⊃⍵}∘{i1∘←0 ⋄ ⍵}
-     S←{down up inc dec←conv ⋄ down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{                                    ⍝ solve grain stresses
-         su bu _ st←⍵ ⋄ esu ju←U au+su ⋄ bu jv j←⍺ ju C bu ⍬ ⋄ jv←(i6-↓[1]+.×∘⌹vu+.×i6-⍤2⊢)jv
+     S←{down up inc dec←conv ⋄ down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{                                  ⍝ solve grain stresses
+         su bu _ st←⍵ ⋄ esu ju←U au+su ⋄ bu jv j←(i6-↓[1]+.×∘⌹vu+.×i6-⍤2⊢)¨@2⊢⍺ ju C bu ⍬
          ∆s ∆e←bo(~bo)×st(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu←(su+.×⍨,⌿ku)+t×,⌿(⊃+/)¨msu×⍤1 0⊢esu)
          ∆←∆e+j+.×∆s ⋄ ∆u←(e-eu)+jv+.×s-su ⋄ x xu∘←⌈/⍤|¨∆(⌈/⍤|¨∆u) ⋄ d ⍺⍺¨←(xu yu)(x y)
          (su+⊃d+.×(bu+.×j⌹⍨∆)((j+jv)↓[1]⍤(⌹⍨⍤¯1)⍥(↑[÷2])∆u))bu esu st
-     }⍣{i+←1 ⋄ y yu∘←x xu ⋄ (max=i)∨tol∧.>x xu÷xo}∘{d y yu∘←1 ⋄ i ic∘←0 ⋄ xo∘←⌈/|t×vo ⋄ ⍵}     ⍝ init
-     i3 i6←∘.=⍨∘⍳¨3 6 ⋄ bd←(⊂i6)×⍤1¨(2 0 0 1 0 1)(0 2 0 1 1 0)(0 0 2 0 1 1)÷2
-     tol max←⍺⍺ ⋄ conv←⍵⍵ ⋄ n t bo vo wo so←⍺ ⋄ mat ea area vol←⍵ ⋄ m←∪mat
-     iu vuvd vu ru←{⍺[⍵](⍵∘{⍵[⍺;⍺]}¨(⊢÷⍤1 0+/)¨area)((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}∘⍋⍨⍳⍨mat
-     ku ssu←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu←+_V ssu
-     as←ae←6⍴at←0 ⋄ asu←≠⍨tsu←m.z ⋄ fu←i3×⊂1⍴⍨≢vol ⋄ r←1 15⍴0 ⋄ r(E ru)fu⊣{                    ⍝ simulation
-         au bu←⍵ ⋄ su bu esu _←(bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu)S(=⍨au)bu ⍬(so-bo×(vu+.×⍨↑au)-so)
-         tsu+←m.(⊃H/)↓⍉↑asu(t×esu) ⋄ asu+←t×|esu ⋄ fu+.×⍨←i3+t×,⌿(⊃+/)¨ssu×⍤2 0⊢esu ⋄ ru W←esu
-         at au as ae+←t su s e ⋄ r⍪←at,ae,as,i,ic ⋄ au bu
+     }⍣{i+←1 ⋄ y yu∘←x xu ⋄ (max=i)∨tol∧.>x xu÷xo}∘{d y yu∘←1 ⋄ i ic∘←0 ⋄ xo∘←⌈/|t×vo ⋄ ⍵}
+     i3 i6←∘.=⍨∘⍳¨3 6 ⋄ bd←(⊂i6)×⍤1¨(2 0 0 1 0 1)(0 2 0 1 1 0)(0 0 2 0 1 1)÷2                ⍝ init
+     tol max←⍺⍺ ⋄ conv←⍵⍵ ⋄ n t bo vo wo so←⍺ ⋄ mat ea area vol←⍵ ⋄ m←∪mat                   ⍝   parameters
+     iu vuvd vu ru←{⍺[⍵](⍵∘{⍵[⍺;⍺]}¨(⊢÷⍤1 0+/)¨area)((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}∘⍋⍨⍳⍨mat      ⍝   microstructure
+     ku ssu←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu←+_V ssu            ⍝   behaviour
+     as←ae←6⍴at←0 ⋄ asu←≠⍨tsu←m.z ⋄ fu←i3×⊂1⍴⍨≢vol ⋄ r←1 15⍴0 ⋄ r(E ru)fu⊣{                  ⍝ simulation
+         au bu←⍵ ⋄ su bu esu _←(bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu)S(=⍨au)bu ⍬((2×so)-vu+.×⍨↑au)       ⍝   solve stress
+         tsu+←m.(⊃H/)↓⍉↑asu(asu+←t×|esu) ⋄ fu+.×⍨←i3+t×,⌿(⊃+/)¨ssu×⍤2 0⊢esu ⋄ ru W←esu       ⍝   update micro
+         at au as ae+←t su s e ⋄ r⍪←at,ae,as,i,ic ⋄ au bu                                    ⍝   update state
      }⍣n⊢(au←↓6(≢vol)⍴0)(i6×⊂(≢vol)⍴÷2)
  }
