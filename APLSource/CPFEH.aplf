@@ -1,34 +1,34 @@
  CPFEH←{
      ⍝ Symmetric (⍺⍺←+) or antisymmetric (⍺⍺←-) 3 3-tensor as 6-vector
      _S←{((⊃¨((2⍴¨⍳3),(2 3)(1 3)(1 2))⌷¨⊂)2÷⍨⍺⍺∘⍉⍨)⍤2⊢⍵}
+
      ⍝ Matrix rotation (3 3) from Euler angles (3)
-     M←{
-         A B C a b c←,1 2∘.○⍵
+     M←{ A B C a b c←,1 2∘.○⍵
          3 3⍴((a×c)-b×A×C)(-(a×C)+b×c×A)(A×B)((c×A)+a×b×C)((a×b×c)-A×C)(-a×B)(B×C)(c×B)b}
-     ⍝ Fill vector ⍺ of 6 6 rotation matrix ⍵ from 3 3 matrix ⍺⍺
-     _V←{
-         i j←(2 1 1)(3 3 2) ⋄ r←⍵ ⋄ r[⍳3;⍺]←×⍨⍺⍺[⍺;⍳3]
-         r[⍺;3+⍳3]←2*⍺⍺[i;⍺]×⍺⍺[j;⍺] ⋄ r[3+⍳3;⍺]←⍺⍺[⍺;i]×⍺⍺[⍺;j]
-         r[3+⍳3;3+⍺]←⍺⍺[i[⍺];i]×⍺⍺[j[⍺];j]+⍺⍺[j[⍺];i]×⍺⍺[i[⍺];j] ⋄ r}
-     ⍝ Rotation matrix 6 6 from 3 3 matrix
-     R←{⊃⍵ _V/(⍳3),⊂6 6⍴≠⍨⊃⍵}{(⍺⍺⍉⍺)+.×⍵+.×(⊃⍪⌿,/3 3∘⍴¨2 2⍴1 0.5 2 1)∘×⍺⍺ ⍺}
+
      ⍝ Euler angles (3) from rotation matrix (3 3)
-     E←{
-         p2←(¯3○⍵[3;1]÷⍥(b∘/⊃)⍵[3;2])@((b←⊃0.9999>⍵[3;3])⍨)≠⍨p←¯2○⊃⍵[3;3]
+     E←{ p2←(¯3○⍵[3;1]÷⍥(b∘/⊃)⍵[3;2])@((b←⊃0.9999>⍵[3;3])⍨)≠⍨p←¯2○⊃⍵[3;3]
          p1←¯3○(-⍵[1;3]÷⍥(b∘/⊃)⍵[2;3])@(b⍨)(⍵[2;1]÷⍥((~b)∘/⊃)⍵[1;1])@(~b⍨)p ⋄ p1 p p2}
+
+     ⍝ Rotation matrix 6 6 from 3 3 matrix
+     R←{ i j←(2 1 1)(3 3 2) ⋄ r w←⍵ ⋄ r[⍳3;⍺]←×⍨w[⍺;⍳3]
+         r[⍺;3+⍳3]←2*w[i;⍺]×w[j;⍺] ⋄ r[3+⍳3;⍺]←w[⍺;i]×w[⍺;j]
+         r[3+⍳3;3+⍺]←w[i[⍺];i]×w[j[⍺];j]+w[j[⍺];i]×w[i[⍺];j] ⋄ r w
+     }{⊃⊃⍺⍺/(⍳3),⊂(6 6⍴≠⍨⊃⍵)⍵}{(⍺⍺⍉⍺)+.×⍵+.×(⊃⍪⌿,/3 3∘⍴¨2 2⍴1 0.5 2 1)∘×⍺⍺ ⍺}
+
      ⍝ Rotate 3 3 rotation matrices ⍺ with slip shear ⍵ (by slip plane and grain)
-     W←{
-         w3←3 3⍴0 1 ¯1 1 0 ¯1 1 ¯1 0×(0,⍨(3↓t×,⌿(⊃+/)¨(-_S ssu)×⍤1 0⊢⍵)-⍺+.×wo+.×⍉⍺)[9⍴⌽⍳4]
+     W←{ w3←3 3⍴0 1 ¯1 1 0 ¯1 1 ¯1 0×(0,⍨(3↓t×,⌿(⊃+/)¨(-_S ssu)×⍤1 0⊢⍵)-⍺+.×wo+.×⍉⍺)[9⍴⌽⍳4]
          ⍺+.×i3+(ww×1○wu)+ww+.×(ww←w3÷wu)×1-2○wu←(÷2)*⍨+/1 1⍉w3←↑{0.5×⍵×3-+.×⍨⍵}¨↓w3}
+
      ⍝ Return slip shear and compliance of each grain for grain stresses ⍵
-     U←{
-         esu←m.e×(××m.hs*⍨|)rsu←(msu÷⍤1 0⊢tsu)+.×⍤1⊂¨iu⊆[1]↑[÷2]⍵
+     U←{ esu←m.e×(××m.hs*⍨|)rsu←(msu÷⍤1 0⊢tsu)+.×⍤1⊂¨iu⊆[1]↑[÷2]⍵
          ju←,⌿ku+t×(⊃+/)¨(tsu÷⍨⍤0 2∘.×⍤1⍨msu)×⍤2 0⊢m.hs×m.e×(××(m.hs-1)*⍨|)rsu ⋄ esu ju}
+
      ⍝ Self-consistent method to get localisation, interaction and global compliance tensors
-     C←{
-         bd ju←⍺ ⋄ j←vu+.×⍨↑ju+.×⊃⍵ ⋄ biu∘←+⌿(↑bd)+.×⍤2⊢vuvd∘.(+.×)i6-⊃⍵
+     C←{ bd ju←⍺ ⋄ j←vu+.×⍨↑ju+.×⊃⍵ ⋄ biu∘←+⌿(↑bd)+.×⍤2⊢vuvd∘.(+.×)i6-⊃⍵
          bu←(↓[1]+.×∘⌹vu+.×⊢)(↑[÷2]ju){(j+⍵)⌹⍨↑j+⍺}⍤2⊢jv←{j+.×⍵⌹i6-⍵}⍤2↑[÷2]biu ⋄ bu jv j
      }⍣{i1 ic+←1 ⋄ (max=i1)∨tol>w∘←⌈/∊|⍺(-÷⌈⍥|)⍥⊃⍵}∘{i1∘←0 ⋄ ⍵}
+
      ⍝ Calculate grain stresses, localisation tensors, slip systems shear and target stress
      S←{down up inc dec←conv ⋄ down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{
          su bu _ st←⍵ ⋄ esu ju←U au+su ⋄ bu jv j←⍺ ju C bu ⍬ ⋄ jv←(i6-↓[1]+.×∘⌹vu+.×i6-⍤2⊢)jv
