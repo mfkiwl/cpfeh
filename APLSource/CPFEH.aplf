@@ -9,16 +9,15 @@ CPFEH←{
      }{⊃⊃⍺⍺/(⍳3),⊂(6 6⍴≠⍨⊃⍵)⍵}{(⍺⍺⍉⍺)+.×⍵+.×(⊃⍪⌿,/3 3∘⍴¨2 2⍴1 0.5 2 1)∘×⍺⍺ ⍺}
      W←{ w←0 1 ¯1 1 0 ¯1 1 ¯1 0×(0,⍨(3↓T(-_ ssu)×⍤1 0⊢⍵)-⍺+.×wo+.×⍉⍺)[9⍴⌽⍳4]                 ⍝ rotate orientation matrices
          ⍺+.×i3+(w×1○u)+w+.×(w←w÷u)×1-2○u←(÷2)*⍨+/1 1⍉w←↑{0.5×⍵×3-+.×⍨⍵}¨↓3 3 ⍴w}
-     U←{ esu←m.e×(××m.hs*⍨|)rsu←(msu÷⍤1 0⊢tsu)+.×⍤1⊂¨iu⊆[1]↑[÷2]⍵                            ⍝ unit shear anc compliance
-         ju←,⌿ku+t×(⊃+/)¨(tsu÷⍨⍤0 2∘.×⍤1⍨msu)×⍤2 0⊢m.hs×m.e×(××(m.hs-1)*⍨|)rsu ⋄ esu ju}
-     C←{ bd ju←⍺ ⋄ j∘←vu+.×⍨↑ju+.×⍵ ⋄ biu∘←+⌿(↑bd)+.×⍤2⊢vuvd∘.(+.×)i6-⍵                      ⍝ self-consistent interaction
-         (↓[1]+.×∘⌹vu+.×⊢)(↑[÷2]ju)((j+⊢)⌹⍨∘↑j+⊣)⍤2⊢jv∘←(j+.×⊢⌹i6-⊢)⍤2↑[÷2]biu
+     C←{ jv∘←((j∘←vu+.×⍨↑ju+.×⍵)+.×⊢⌹i6-⊢)⍤2↑[÷2]+⌿(↑⍺)+.×⍤2⊢vuvd∘.(+.×)i6-⍵                 ⍝ self-consistent interaction
+         (↓[1]+.×∘⌹vu+.×⊢)(↑[÷2]ju)((j+⊢)⌹⍨∘↑j+⊣)⍤2⊢jv∘←(i6-⍤2⊢+.×∘⌹vu+.×i6-⍤2⊢)jv
      }⍣{i1 ic+←1 ⋄ (max=i1)∨tol>w∘←⌈/∊|⍺(-÷⌈⍥|)⍥⊃⍵}∘{i1∘←0 ⋄ ⍵}
-     S←{down up inc dec←conv ⋄ down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{su so←⍵                           ⍝ solve grain stresses
-         esu ju∘←U au+su ⋄ bu∘←⍺ ju C bu ⋄ jv←(i6-↓[1]+.×∘⌹vu+.×i6-⍤2⊢)jv
-         ∆s ∆e←bo(~bo)×so(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu←(su+.×⍨,⌿ku)+T msu×⍤1 0⊢esu)
-         ∆←∆e+j+.×∆s ⋄ ∆u←(e-eu)+jv+.×s-su ⋄ x xu∘←⌈/⍤|¨∆(⌈/⍤|¨∆u) ⋄ d ⍺⍺¨←(xu yu)(x y)
-         (su+⊃d+.×(bu+.×j⌹⍨∆)((j+jv)↓[1]⍤(⌹⍨⍤¯1)⍥(↑[÷2])∆u))so
+     S←{down up inc dec←conv ⋄ down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{su so←⍵ ⋄ g hs←m.e m.hs           ⍝ solve grain stresses
+         esu∘←g×(××hs*⍨|)rsu∘←(msu÷⍤1 0⊢tsu)+.×⍤1⊂¨iu⊆[1]↑[÷2]au+su                          ⍝   local slip shear
+         ju∘←,⌿ku+t×(⊃+/)¨(tsu÷⍨⍤0 2∘.×⍤1⍨msu)×⍤2 0⊢hs×g×(××(hs-1)*⍨|)rsu ⋄ bu∘←⍺ C bu       ⍝   local behaviour
+         ∆←⊃(⊢+j+.×⊣)/bo(~bo)×so(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu←(su+.×⍨,⌿ku)+T msu×⍤1 0⊢esu)     ⍝   global error
+         ∆u∘←(e-eu)+(↓[1]jv)+.×s-su ⋄ x xu∘←⌈/⍤|¨∆(⌈/⍤|¨∆u) ⋄ d ⍺⍺¨←(xu yu)(x y)             ⍝   local error and factor
+         (su+⊃d+.×(bu+.×j⌹⍨∆)(↓[1](j+⍤2⊢jv)⌹⍨⍤¯1↑[÷2]∆u))so                                  ⍝   local correction
      }⍣{y yu∘←x xu ⋄ (max=i∘←i+1)∨tol∧.>x xu÷xo}∘{d y yu∘←~i ic∘←0 ⋄ xo∘←⌈/|t×vo ⋄ ⍵}
      _←{((⊃¨((2⍴¨⍳3),(2 3)(1 3)(1 2))⌷¨⊂)2÷⍨⍺⍺∘⍉⍨)⍤2⊢⍵} ⋄ T←{t×,⌿(⊃+/)¨⍵}
      i3 i6←∘.=⍨∘⍳¨3 6 ⋄ bd←(⊂i6)×⍤1¨(2 0 0 1 0 1)(0 2 0 1 1 0)(0 0 2 0 1 1)÷2                ⍝ init
