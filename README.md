@@ -80,4 +80,21 @@ argument it takes the microstructure, including materials (which can be
 read from json files with the `MATERIAL` function), orientations,
 topology (given as common areas in each direction) and volume. It returns
 a table with time, strain, stress and number of iterations to solve stress
-and to reach self-consistency.
+and to reach self-consistency. See [example](eg.apls).
+
+## References
+
+- [A self-consistent anisotropic approach for the simulation of plastic
+deformation and texture development of polycrystals: application to zirconium alloys.
+RA Lebensohn, CN Tomé. Acta metallurgica et materialia, 1993][1]
+
+- [Material modeling with the visco-plastic self-consistent (VPSC) approach: theory
+and practical applications. CN Tome, RA Lebensohn. 2023][2]
+
+- [An improved algorithm for the polycrystal viscoplastic self-consistent model and
+its integration with implicit finite element schemes. J Galán, P Verleysen, RA Lebensohn.
+Modelling and Simulation in Materials Science and Engineering, 2014][3]
+
+[1]: https://www.sciencedirect.com/science/article/abs/pii/095671519390130K
+[2]: https://www.sciencedirect.com/book/9780128207130/material-modeling-with-the-visco-plastic-self-consistent-vpsc-approach
+[3]: https://iopscience.iop.org/article/10.1088/0965-0393/22/5/055023/meta
