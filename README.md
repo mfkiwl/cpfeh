@@ -5,8 +5,8 @@ Crystal Plasticity Finite Element Homogenization model for
 
 ## Example
 
-The script `eg.apls` runs several example simulations using a randomly
-generated microstructure with Fe-gamma and Fe-alpha grains with
+The script [example script](eg.apls) runs several example simulations using
+a randomly generated microstructure with Fe-gamma and Fe-alpha grains applying
 boundary conditions of uniaxial tension.
 
 Expected output:
@@ -79,21 +79,24 @@ and as left operand the target error and maximum number of steps. As right
 argument it takes the microstructure, including materials (which can be
 read from json files with the `MATERIAL` function), orientations,
 topology (given as common areas in each direction) and volume. It returns
-a table with time, strain, stress and number of iterations to solve stress
-and to reach self-consistency. See [example](eg.apls).
+a table with results by time (strain, stress and number of iterations to
+solve stress and to reach self-consistency), the deformed texture, and the
+deformation of each grain.
+
+See [example](eg.apls).
 
 ## References
 
 - [A self-consistent anisotropic approach for the simulation of plastic
-deformation and texture development of polycrystals: application to zirconium alloys.
-RA Lebensohn, CN Tomé. Acta metallurgica et materialia, 1993][1]
+deformation and texture development of polycrystals: application to zirconium alloys][1].
+RA Lebensohn, CN Tomé. Acta metallurgica et materialia, 1993
 
 - [Material modeling with the visco-plastic self-consistent (VPSC) approach: theory
-and practical applications. CN Tome, RA Lebensohn. 2023][2]
+and practical applications][2]. CN Tome, RA Lebensohn. 2023
 
 - [An improved algorithm for the polycrystal viscoplastic self-consistent model and
-its integration with implicit finite element schemes. J Galán, P Verleysen, RA Lebensohn.
-Modelling and Simulation in Materials Science and Engineering, 2014][3]
+its integration with implicit finite element schemes][3]. J Galán, P Verleysen, RA Lebensohn.
+Modelling and Simulation in Materials Science and Engineering, 2014
 
 [1]: https://www.sciencedirect.com/science/article/abs/pii/095671519390130K
 [2]: https://www.sciencedirect.com/book/9780128207130/material-modeling-with-the-visco-plastic-self-consistent-vpsc-approach
