@@ -11,10 +11,10 @@ mat←?n⍴≢m←MATERIAL¨bcc fcc           ⍝ material
 ea vol←{(2×○?3⍴⊂⍵⍴0)((⊢÷+/)?⍵⍴0)}n   ⍝ texture
 area←{(⍳3){(⊢÷⍤1 0+/)4+?⍵}¨⊂⍵ ⍵⍴0}n  ⍝ topology
 
-b←0 1 1 0 0 0                        ⍝ stresses
-r←1e¯3,5⍴0                           ⍝ strain rate
-w←0                                  ⍝ angular velocity
-s←6⍴0                                ⍝ stress
+bc←0 1 1 0 0 0                       ⍝ stress bcs
+sr←1e¯3,5⍴0                          ⍝ strain rate
+wr←0                                 ⍝ angular velocity
+st←6⍴0                               ⍝ stress
 tol←1e¯3                             ⍝ tolerance
 max←500                              ⍝ max iterations
 conv←0.1 0.9 1.25 1.5                ⍝ down up inc dec
@@ -22,7 +22,7 @@ conv←0.1 0.9 1.25 1.5                ⍝ down up inc dec
 I←9 0∘⍕ ⋄ D←9 2∘⍕ ⋄ S←9 ¯3∘⍕ ⍝ integer decimal scientific
 SIM←{
     ⍺←⍬ ⋄ o n t←⍵ ⋄ e←o↑¨ea ⋄ v i←o↑¨vol mat ⋄ a←o o∘↑¨area
-    r e f←n t b r w s(tol max CPFEH conv)m[i]e a v⊣ts←⎕TS
+    r e f←n t bc sr wr st(tol max CPFEH conv)m[i]e a v⊣ts←⎕TS
     _←(↓[1]r)(e,⊂v)(,f)⎕CSV⍠'IfExists' 'Replace'¨⍣(~0∊⍴⍺)⊢⍺
     ⍺,⍨10↑¨(2(I¨⍤↑,S¨⍤↓)⍵),(I¨+⌿¯2↑[2]r),⊂D 1e3÷⍨⎕TS-⍥(12⎕DT⊂)ts
 }
