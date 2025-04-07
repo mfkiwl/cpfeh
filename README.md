@@ -5,7 +5,7 @@ Crystal Plasticity Finite Element Homogenization model for
 
 ## Example
 
-The script [example script](eg.apls) runs several example simulations using
+The script [`eg.apls`](eg.apls) runs several example simulations using
 a randomly generated microstructure with Fe-gamma and Fe-alpha grains applying
 boundary conditions of uniaxial tension.
 
