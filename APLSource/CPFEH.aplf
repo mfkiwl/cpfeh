@@ -12,7 +12,7 @@ CPFEH←{
      C←{ jv∘←((j∘←vu+.×⍨↑ju+.×⍵)+.×⊢⌹i6-⊢)⍤2↑[÷2]+⌿(↑⍺)+.×⍤2⊢vuvd∘.(+.×)i6-⍵                 ⍝ self-consistent interaction
          (↓[1]+.×∘⌹vu+.×⊢)(↑[÷2]ju)((j+⊢)⌹⍨∘↑j+⊣)⍤2⊢jv∘←(i6-⍤2⊢+.×∘⌹vu+.×i6-⍤2⊢)jv
      }⍣{i1 ic+←1 ⋄ (max=i1)∨tol>w∘←⌈/∊|⍺(-÷⌈⍥|)⍥⊃⍵}∘{i1∘←0 ⋄ ⍵}
-     S←{down up inc dec←conv ⋄ down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{su so←⍵ ⋄ g hs←m.e m.hs           ⍝ solve grain stresses
+     S←{down up inc dec←conv ⋄ down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{su so←⍵ ⋄ g hs←m.g m.hs           ⍝ solve grain stresses
          esu∘←g×(××hs*⍨|)rsu∘←(msu÷⍤1 0⊢tsu)+.×⍤1⊂¨iu⊆[1]↑[÷2]au+su                          ⍝   local slip shear
          ju∘←,⌿ku+t×(⊃+/)¨(tsu÷⍨⍤0 2∘.×⍤1⍨msu)×⍤2 0⊢hs×g×(××(hs-1)*⍨|)rsu ⋄ bu∘←⍺ C bu       ⍝   local behaviour
          ∆←⊃(⊢+j+.×⊣)/bo(~bo)×so(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu←(su+.×⍨,⌿ku)+T msu×⍤1 0⊢esu)     ⍝   global error
@@ -22,11 +22,11 @@ CPFEH←{
      _←{((⊃¨((2⍴¨⍳3),(2 3)(1 3)(1 2))⌷¨⊂)2÷⍨⍺⍺∘⍉⍨)⍤2⊢⍵} ⋄ T←{t×,⌿(⊃+/)¨⍵}
      i3 i6←∘.=⍨∘⍳¨3 6 ⋄ bd←(⊂i6)×⍤1¨(2 0 0 1 0 1)(0 2 0 1 1 0)(0 0 2 0 1 1)÷2                ⍝ init
      tol max←⍺⍺ ⋄ conv←⍵⍵ ⋄ n t bo vo wo so←⍺ ⋄ mat ea area vol←⍵ ⋄ m←∪mat                   ⍝   parameters
-     iu vuvd vu ru←{⍺[⍵](⍵∘{⍵[⍺;⍺]}¨(⊢÷⍤1 0+/)¨area)((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}∘⍋⍨m⍳mat      ⍝   microstructure
+     iu vuvd vu ru←{⍺[⍵](⍵ ⍵∘⌷¨(⊢÷⍤1 0+/)¨area)((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}∘⍋⍨m⍳mat           ⍝   microstructure
      ku ssu←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu←+_ ssu             ⍝   behaviour
-     au←6⍴⊂(≢vu)⍴as←ae←6⍴at←0 ⋄ asu←≠⍨tsu←m.z ⋄ fu←i3×⊂(≢vu)⍴1 ⋄ bu←i6 ⋄ r(E ru)fu⊣{         ⍝ simulation
+     au←6⍴⊂(≢vu)⍴as←ae←6⍴at←0 ⋄ asu←≠⍨tsu←m.z ⋄ fu←i3×⊂(≢vu)⍴1 ⋄ bu←i6 ⋄ (E ru)fu,⍨⊂{        ⍝ simulation
          su←⊃(bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu)S(=⍨au)((2×so)-vu+.×⍨↑au)                             ⍝   solve stress
          tsu+←m.(⊃H/)↓⍉↑asu(t×esu) ⋄ asu+←t×|esu ⋄ fu+.×⍨←i3+T ssu×⍤2 0⊢esu ⋄ ru W←esu       ⍝   update micro
-         at ae as au+←t e s su ⋄ r⍪←at,ae,as,i ic ⋄ ⍬                                        ⍝   update state
-    }⍣n⊢↓6(≢vu)⍴r←1 15⍴0
+         at ae as au+←t e s su ⋄ ⍵⍪at,ae,as,i ic                                             ⍝   update state
+    }⍣n⊢1 15⍴0
 }
