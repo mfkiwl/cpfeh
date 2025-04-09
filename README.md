@@ -12,14 +12,14 @@ boundary conditions of uniaxial tension.
 Expected output:
 
         grains      steps       ∆time       iter        iterc       seconds
-            50          10   5.00E¯2            70          73        0.24
-           100          10   5.00E¯2            63          66        0.30
-           150          10   5.00E¯2            67          70        0.46
-           200          10   5.00E¯2            64          67        0.69
-           250          10   5.00E¯2            63          66        1.22
-            50         100   5.00E¯2          2654        2724       13.59
-            50         500   5.00E¯2          9348        9418       44.73
-            50        1000   5.00E¯2         12991       13061       63.40   r.csv  tex.csv  f.csv
+            50          10   5.00E¯2            70          73        0.11
+           100          10   5.00E¯2            63          66        0.13
+           150          10   5.00E¯2            67          70        0.21
+           200          10   5.00E¯2            64          67        0.27
+           250          10   5.00E¯2            63          66        0.37
+            50         100   5.00E¯2          2654        2724        3.75
+            50         500   5.00E¯2          9348        9418       13.84
+            50        1000   5.00E¯2         12991       13061       23.32   r.csv  tex.csv  f.csv
 
 Timings (in the last column) may vary. Plotting the strain and stress
 in the generated file `r.csv` should result in the following tensile

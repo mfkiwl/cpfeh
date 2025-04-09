@@ -1,4 +1,4 @@
- CPFEH←{i3 i6←∘.=⍨∘⍳¨3 6 ⋄ ij←(2 1 1)(3 3 2) ⋄ bd←(,/(-⍳3)∘.⌽(3↑2)(1 0 1))×⍤1¨⊂i6÷2
+ CPFEH←{
      M←{a b c d e f←,1 2∘.○⍵                                                                ⍝ matrix from euler angles
          3 3⍴((d×f)-e×a×c)(-(d×c)+e×f×a)(a×b)((f×a)+d×e×c)((d×e×f)-a×c)(-d×b)(b×c)(f×b)e}
      E←{p2←(¯3○⍵[3;1]÷⍥(b∘/⊃)⍵[3;2])@((b←⊃0.9999>⍵[3;3])⍨)≠⍨p←¯2○⊃⍵[3;3]                    ⍝ euler angles from matrix
@@ -10,20 +10,21 @@
          ⍺+.×i3+(w×1○u)+w+.×(w←w÷u)×1-2○u←(÷2)*⍨+/1 1⍉w←↑(÷2)×(⊢×3-+.×⍨)¨↓3 3⍴w}
      C←{jv∘←((j∘←vu+.×⍨↑ju+.×⍵)+.×⊢⌹i6-⊢)⍤2↑[÷2]+⌿(↑⍺)+.×⍤2⊢vuvd∘.(+.×)i6-⍵                 ⍝ self-consistent interaction
          (↓[1]+.×∘⌹vu+.×⊢)(↑[÷2]ju)((j+⊢)⌹⍨∘↑j+⊣)⍤2⊢jv∘←(i6-⍤2⊢+.×∘⌹vu+.×i6-⍤2⊢)jv
-     }⍣{i1 ic+←1 ⋄ (max=i1)∨tol>w∘←⌈/∊|⍺(-÷⌈⍥|)⍥⊃⍵}∘{i1∘←0 ⋄ ⍵}
+     }⍣{i1 ic+←1 ⋄ (max=i1)∨tol>⌈/∊|⍺(-÷⌈⍥|)⍥⊃⍵}∘{i1∘←0 ⋄ ⍵}
      S←{down up inc dec←conv ⋄ down⌈up⌊⍺×inc(÷dec)[1+>/⍵]}{bd so←⍺                          ⍝ solve grain stresses
          esu∘←g×(××hs*⍨|)rsu∘←(msu÷⍤1 0⊢tsu)+.×⍤1⊂¨iu⊆[1]↑[÷2]au+⍵                          ⍝   local slip shear
          ju∘←,⌿ku+t×+/↑(tsu÷⍨⍤0 2∘.×⍤1⍨msu)×⍤2 0⊢hs×g×(××(hs-1)*⍨|)rsu ⋄ bu∘←bd C bu        ⍝   local behaviour
          ∆←⊃bo(~bo)(⊢+j+.×⊣).×so(vo×t)-s e∘←(vu+.×⍨↑)¨⍵(eu←(⍵+.×⍨,⌿ku)+T msu×⍤1 0⊢esu)      ⍝   global error
          ∆u∘←(e-eu)+(↓[1]jv)+.×s-⍵ ⋄ x xu∘←⌈/⍤|¨∆(⌈/⍤|¨∆u) ⋄ d ⍺⍺¨←(xu yu)(x y)             ⍝   local error and factor
-         ⍵+⊃d+.×(bu+.×j⌹⍨∆)(↓[1](j+⍤2⊢jv)⌹⍨⍤¯1↑[÷2]∆u)                                      ⍝   local correction
-     }⍣{(max=i∘←i+1)∨tol∧.>xo÷⍨y yu∘←x xu}∘{d y yu∘←1 ⋄ i ic∘←0 ⋄ xo∘←⌈/|t×vo ⋄ ⍵}
-     _←{((⊃¨⍵⍵⌷¨⊂)2÷⍨⍺⍺∘⍉⍨)⍤2⊢⍵}((2⍴¨⍳3),↓⍉↑ij) ⋄ T←{t×,⌿(⊃+/)¨⍵}
+         ⍵+⊃d+.×(bu+.×j⌹⍨∆)(↓[1](j+⍤2⊢jv)⌹⍨⍤¯1↑[÷2]∆u)                                      ⍝   stress correction
+     }⍣{(max=is∘←is+1)∨tol∧.>xo÷⍨y yu∘←x xu}∘{d y yu∘←1 ⋄ is ic∘←0 ⋄ xo∘←⌈/|t×vo ⋄ ⍵}
+     i3 i6←∘.=⍨∘⍳¨3 6 ⋄ ij←(2 1 1)(3 3 2) ⋄ bd←(,/(-⍳3)∘.⌽(3↑2)(1 0 1))×⍤1¨⊂i6÷2            ⍝ constants
+     _←{((⊃¨⍵⍵⌷¨⊂)2÷⍨⍺⍺∘⍉⍨)⍤2⊢⍵}((2⍴¨⍳3),↓⍉↑ij) ⋄ T←{t×,⌿(⊃+/)¨⍵}                           ⍝ helpers
      tol max←⍺⍺ ⋄ conv←⍵⍵ ⋄ n t bo vo wo so←⍺ ⋄ m←∪⊃mat ea area vol←⍵ ⋄ g hs←m.g m.hs       ⍝ parameters
      iu vuvd vu ru←{⍺[⍵](⍵ ⍵∘⌷¨(⊢÷⍤1 0+/)¨area)((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}∘⍋⍨m⍳mat          ⍝ microstructure
      ku ssu←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu←+_ ssu            ⍝ behaviour
      su←au←6⍴⊂(≢vu)⍴as←ae←6⍴asu←at←0 ⋄ tsu←m.z ⋄ fu←i3×⊂(≢vu)⍴1 ⋄ bu←i6 ⋄ (E ru)fu,⍨⊂{      ⍝ simulation
          at ae as au+←t e s,⊂su∘←(bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu)((2×so)-vu+.×⍨↑au)S su           ⍝   solve
          tsu+←m.(⊃H/)↓⍉↑asu(t×esu) ⋄ asu+←t×|esu ⋄ fu+.×⍨←i3+T ssu×⍤2 0⊢esu ⋄ ru W←esu      ⍝   update
-         ⍵⍪at,ae,as,i ic}⍣n⊢1 15⍴0
+         ⍵⍪at,ae,as,is ic}⍣n⊢1 15⍴0
  }
