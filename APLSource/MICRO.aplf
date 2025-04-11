@@ -1,0 +1,23 @@
+∇ r←a MICRO w
+    ANG←{da iq ci←⍺ ⋄ file←⍵ ⋄ _ea(_y _x _iq _ci _ph)←(⍳3)(3+⍳5)
+        c←⎕CSV⍠2⊢('(^\s+)|(\s+$)' '\s+'⎕R'' ','((~'#'∘∊¨)⊢⍤/⊢)⊃⎕NGET file 1)'N'2 0
+        x y←c[_x _y] ⋄ ∆x←⌈/|2-/x ⋄ nx←⌈1+∆x÷⍨(⌈/-⌊/)x ⋄ ny←(≢x)÷nx ⋄ ∆y←ny÷⍨(⌈/-⌊/)y
+        CAT←{u(1-⍨⍵⍳⍨u←⍺(⊣⍪~⍨)⊃{⍺[⍒⍵]}/↓⍉,∘≢⌸⍺⍪⍵)} ⋄ ok←⊃iq ci∧.<c[_iq _ci] ⋄ a←○da÷180
+        pu p←¯1 CAT ¯1@(~ok⍨)_ph⊃c ⋄ eu e←0 CAT a(⌊0.5+÷⍨)⍣(da>0)⊢ok/↓⍉↑(○2)|c[_ea]
+        gu g←(⊂0 0)CAT↓⍉↑p(e@(ok⍨)p) ⋄ ∆x ∆y(1↓pu)(a×⍣(da>0)⊢1↓eu),(↑1↓gu)(ny nx⍴g)}
+    MIS←{pu eu gu g←⍵ ⋄ m←⍺ EULER.(M∘QE)↓⍉↑eu ⋄ pp←∪,∘.(⌊,⌈)⍨⍳≢pu ⋄ F←{r←⍵ ⋄ r[(⊣/m.M⊢/)⍺]+←1 ⋄ r}
+        M←{e←1↓¨((⍳≢pp),(↑pp)⍳(↑⌊/,¨⌈/)gu[⍵[;⍳2];1])⊂⍤⊢⌸(↑pp)⍪gu[⍵[;⍳2];2] ⋄ ↑e F¨↓0⍴⍨(≢pp),m.ML○1}
+        m pp,(⊢÷(+/+⌿))¨M¨(,∘≢⌸↑)¨{_←{,1(⊢(⌊,⌈)¨⍺⍺)⍵} ⋄ {⍵/⍨0<⊃¨⍵}¨(⌽_⍵)(⊖_⍵)}g}
+    VOL←{pu eu gu g←⍺ ⋄ m pp←2↑⍵ ⋄ md←2↓⍵ ⋄ m←{⍵ EULER.(M∘QE)↓⍉↑eu}⍣(326≢⎕DR m)⊢m
+        v←(≢⍤⊢⌸{(0<⍵)/⍵})⍣(g≢⍥⍴gu),g ⋄ gu v←(⍒v)∘{(⊂⍺)⌷[1]⍵}¨gu v ⋄ vu←(⊢÷+/)v
+        mi←(2⍴≢gu)⍴⊃⌽mu mi←{u(⍵⍳⍨u←∪⍵)},(pp⍳∘.(⌊,⌈)⍨⊣/gu),¨↑(⊂m.M¨⊢)⊢/gu
+        r←((⊢⍴⍨2⍴≢)vu)÷mi{⍵[⍺]}⍤1⊢(0⍴⍨≢mu){r←⍺ ⋄ r[⍵]+←vu ⋄ r}⍤1⊢mi
+        (pu[⊣/gu])(eu[⊢/gu])vu,{(⊢÷⍤1 0+/)r×⍵[mu[mi]]}¨md}
+    :If 80=⎕DR w
+        r←(3↑a)ANG w                                ⍝ ∆x ∆y pu eu gu g←da iq ci MICRO file
+        :If 3=≢a ⋄ →0 ⋄ :EndIf
+        r←2(↑,↓(VOL,¯3↑⊢)(⊢/a)MIS↓)r ⋄ →0           ⍝ ∆x ∆y iu ea vu vx vy pp mx my←da iq ci dm MICRO file
+    :EndIf
+    :If 1=≢a ⋄ r←w(VOL,¯3↑⊢)a MIS w ⋄ →0 ⋄ :EndIf   ⍝ iu ea vu vx vy pp mx my←dm MICRO pu eu gu g
+    r←a VOL w                                       ⍝ iu ea vu vx vy←pu eu gu g MICRO dm pp mx my
+∇
