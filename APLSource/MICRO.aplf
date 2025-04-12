@@ -1,23 +1,28 @@
 ∇ r←a MICRO w
-    ANG←{da iq ci←⍺ ⋄ file←⍵ ⋄ _ea(_y _x _iq _ci _ph)←(⍳3)(3+⍳5)
+    CAT←{(1↓u)(1-⍨⍵⍳⍨u←⍺(⊣⍪~⍨)⊃{⍺[⍒⍵]}/↓⍉,∘≢⌸⍺⍪⍵)}{⍺←1 ⋄ ph ea←⍵                      ⍝ categorise
+        pu p←¯1 ⍺⍺ ¯1@(~⍺⍨)ph ⋄ eu e←0 ⍺⍺ ea ⋄ pu eu,(⊂0 0)⍺⍺↓⍉↑p(e@(⍺⍨)p)}
+    ANG←{da iq ci←⍺ ⋄ file←⍵ ⋄ _ea(_y _x _iq _ci _ph)←(⍳3)(3+⍳5)                      ⍝ read ang file
         c←⎕CSV⍠2⊢('(^\s+)|(\s+$)' '\s+'⎕R'' ','((~'#'∘∊¨)⊢⍤/⊢)⊃⎕NGET file 1)'N'2 0
-        x y←c[_x _y] ⋄ ∆x←⌈/|2-/x ⋄ nx←⌈1+∆x÷⍨(⌈/-⌊/)x ⋄ ny←(≢x)÷nx ⋄ ∆y←ny÷⍨(⌈/-⌊/)y
-        CAT←{u(1-⍨⍵⍳⍨u←⍺(⊣⍪~⍨)⊃{⍺[⍒⍵]}/↓⍉,∘≢⌸⍺⍪⍵)} ⋄ ok←⊃iq ci∧.<c[_iq _ci] ⋄ a←○da÷180
-        pu p←¯1 CAT ¯1@(~ok⍨)_ph⊃c ⋄ eu e←0 CAT a(⌊0.5+÷⍨)⍣(da>0)⊢ok/↓⍉↑(○2)|c[_ea]
-        gu g←(⊂0 0)CAT↓⍉↑p(e@(ok⍨)p) ⋄ ∆x ∆y(1↓pu)(a×⍣(da>0)⊢1↓eu),(↑1↓gu)(ny nx⍴g)}
-    MIS←{pu eu gu g←⍵ ⋄ m←⍺ EULER.(M∘QE)↓⍉↑eu ⋄ pp←∪,∘.(⌊,⌈)⍨⍳≢pu ⋄ F←{r←⍵ ⋄ r[(⊣/m.M⊢/)⍺]+←1 ⋄ r}
-        M←{e←1↓¨((⍳≢pp),(↑pp)⍳(↑⌊/,¨⌈/)gu[⍵[;⍳2];1])⊂⍤⊢⌸(↑pp)⍪gu[⍵[;⍳2];2] ⋄ ↑e F¨↓0⍴⍨(≢pp),m.ML○1}
+        x y←c[_x _y] ⋄ ∆x←⌈/|2-/x ⋄ ny←(≢x)÷nx←⌈1+∆x÷⍨(⌈/-⌊/)x ⋄ ∆y←ny÷⍨(⌈/-⌊/)y
+        ok←⊃iq ci∧.<c[_iq _ci] ⋄ a←○da÷180 ⋄ ea←a(⌊0.5+÷⍨)⍣(da>0)⊢ok/↓⍉↑(○2)|c[_ea]
+        pu eu gu g←ok CAT(_ph⊃c)ea ⋄ ∆x ∆y pu(a×⍣(da>0)⊢eu),(↑gu)(ny nx⍴g)}
+    SUM←{gu g←⍵ ⋄ v←gu{⍺≡⍥⍴⍵: +⌿⍤⊢⌸⍵ ⋄ ≢⍤⊢⌸{(0<⍵)/⍵},⍵}g ⋄ (⍒v)∘{(⊂⍺)⌷[1]⍵}¨gu v}     ⍝ add volumes
+    MNS←{⍵{⍵ EULER.(M∘QE)↓⍉↑⍺}⍣(326≢⎕DR ⍺)⊢⍺}                                         ⍝ misorientation namespace
+    MIS←{pu eu gu g←⍵ ⋄ m←⍺ MNS eu ⋄ pp←∪,∘.(⌊,⌈)⍨⍳≢pu                                ⍝ misorientation distrib
+        M←{r←⍵ ⋄ r[(⊣/m.M⊢/)⍺]+←1 ⋄ r}{k←(⍳≢pp),(↑pp)⍳(↑⌊/,¨⌈/)gu[⍵[;⍳2];1]
+            e←1↓¨k⊂⍤⊢⌸(↑pp)⍪gu[⍵[;⍳2];2] ⋄ ↑e ⍺⍺¨↓0⍴⍨(≢pp),m.ML○1}
         m pp,(⊢÷(+/+⌿))¨M¨(,∘≢⌸↑)¨{_←{,1(⊢(⌊,⌈)¨⍺⍺)⍵} ⋄ {⍵/⍨0<⊃¨⍵}¨(⌽_⍵)(⊖_⍵)}g}
-    VOL←{pu eu gu g←⍺ ⋄ m pp←2↑⍵ ⋄ md←2↓⍵ ⋄ m←{⍵ EULER.(M∘QE)↓⍉↑eu}⍣(326≢⎕DR m)⊢m
-        v←(≢⍤⊢⌸{(0<⍵)/⍵})⍣(g≢⍥⍴gu),g ⋄ gu v←(⍒v)∘{(⊂⍺)⌷[1]⍵}¨gu v ⋄ vu←(⊢÷+/)v
+    REL←{gu v←⍺ ⋄ m pp←2↑⍵ ⋄ md←2↓⍵ ⋄ m←m MNS eu                                      ⍝ relative weights
         mi←(2⍴≢gu)⍴⊃⌽mu mi←{u(⍵⍳⍨u←∪⍵)},(pp⍳∘.(⌊,⌈)⍨⊣/gu),¨↑(⊂m.M¨⊢)⊢/gu
-        r←((⊢⍴⍨2⍴≢)vu)÷mi{⍵[⍺]}⍤1⊢(0⍴⍨≢mu){r←⍺ ⋄ r[⍵]+←vu ⋄ r}⍤1⊢mi
-        (pu[⊣/gu])(eu[⊢/gu])vu,{(⊢÷⍤1 0+/)r×⍵[mu[mi]]}¨md}
+        r←((⊢⍴⍨2⍴≢)v)÷mi{⍵[⍺]}⍤1⊢(0⍴⍨≢mu){r←⍺ ⋄ r[⍵]+←v ⋄ r}⍤1⊢mi
+        {(⊢÷⍤1 0+/)r×⍵[mu[mi]]}¨md}
+    TOT←{pu eu gu g←⍺ ⋄ m pp←2↑⍵ ⋄ md←2↓⍵                                             ⍝ totals
+        gu v←SUM gu g ⋄ vu←(⊢÷+/)v ⋄ vd←gu vu REL ⍵ ⋄ (pu[⊣/gu])(eu[⊢/gu])vu,vd}
     :If 80=⎕DR w
         r←(3↑a)ANG w                                ⍝ ∆x ∆y pu eu gu g←da iq ci MICRO file
         :If 3=≢a ⋄ →0 ⋄ :EndIf
-        r←2(↑,↓(VOL,¯3↑⊢)(⊢/a)MIS↓)r ⋄ →0           ⍝ ∆x ∆y iu ea vu vx vy pp mx my←da iq ci dm MICRO file
+        r←2(↑,↓(TOT,¯3↑⊢)(⊢/a)MIS↓)r ⋄ →0           ⍝ ∆x ∆y iu ea vu vx vy pp mx my←da iq ci dm MICRO file
     :EndIf
-    :If 1=≢a ⋄ r←w(VOL,¯3↑⊢)a MIS w ⋄ →0 ⋄ :EndIf   ⍝ iu ea vu vx vy pp mx my←dm MICRO pu eu gu g
-    r←a VOL w                                       ⍝ iu ea vu vx vy←pu eu gu g MICRO dm pp mx my
+    :If 1=≢a ⋄ r←w(TOT,¯3↑⊢)a MIS w ⋄ →0 ⋄ :EndIf   ⍝ iu ea vu vx vy pp mx my←dm MICRO pu eu gu g
+    r←a TOT w                                       ⍝ iu ea vu vx vy←pu eu gu g MICRO dm pp mx my
 ∇
