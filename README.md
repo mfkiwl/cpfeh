@@ -104,11 +104,11 @@ Usage:
 
 Parameters:
 
-    - `f[crop]` EBSD ang file and optional crop region (four additional `x0 x1 y0 y1` parameters)
-    - `a c i` angle increment (zero to not round) and minimum image quality and confidence index
-    - `d` disorientation increment or disorientation namespace
-    - `p e v` phases, euler angles and volumes
-    - `q m n z` pairs of phases and istributions of disorientations in x y z directions
+- `f[crop]` EBSD ang file and optional crop region (four additional `x0 y0 x1 y1` parameters)
+- `a c i` angle increment (zero to not round) and minimum image quality and confidence index
+- `d` disorientation increment or disorientation namespace
+- `p e v` phases, euler angles and volumes
+- `q m n z` pairs of phases and istributions of disorientations in x y z directions
 
 ## References
 
