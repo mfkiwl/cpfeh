@@ -24,14 +24,17 @@
         x y←c[_x _y] ⋄ ∆x←⌈/|2-/x ⋄ ny←(≢x)÷nx←⌈1+∆x÷⍨(⌈/-⌊/)x ⋄ ∆y←ny÷⍨(⌈/-⌊/)y
         ea←⍉↑(○da÷180)(⊣×∘⌊0.5+÷⍨)⍣(da>0)⊢(○2)|c[_e]
         (ny nx⍴¯1@(∊iq ci∨.>c[_i _c]⍨)_p⊃c)ea(∆x ∆y)}
-    DIS←{pu eu gu gv g←5↑⍵ ⋄ 0=⎕NC'⍺': VOL ⍵ ⋄ d←⍺ DNS eu ⋄ q←↑∪,∘.(⌊,⌈)⍨⍳≢pu        ⍝ disorientations
+    DIS←{0=⎕NC'⍺': VOL ⍵ ⋄ pu eu gu gv g←5↑⍵ ⋄ d←(⊃⌽⍺)DNS eu ⋄ q←↑∪,∘.(⌊,⌈)⍨⍳≢pu     ⍝ disorientations and sizes
         D←{r←⍵ ⋄ r[(⊣/d.D⊢/)⍺]+←1 ⋄ r}{p e←↓⍉gu ⋄ k←(⍳≢q),q⍳(↑⌊/,¨⌈/)p[2↑[2]⍵]
             e←1↓¨k⊂⍤⊢⌸q⍪e[2↑[2]⍵] ⋄ (⊢÷(+⌿+⌿))↑e ⍺⍺¨↓0⍴⍨(≢q),d.DL○1}∘(,∘≢⌸↑)
-        (VOL ⍵),(⊂pu[q]),(+/gv)×D¨{_←{,1(⊢(⌊,⌈)¨⍺⍺)⍵} ⋄ {⍵/⍨0<⊃¨⍵}¨(⌽_⍵)(⊖_⍵)}g}
+        r←(VOL ⍵),(⊂pu[q]),(+/gv)×D¨{_←{,1(⊢(⌊,⌈)¨⍺⍺)⍵} ⋄ {⍵/⍨0<⊃¨⍵}¨(⌽_⍵)(⊖_⍵)}g
+        1=≢⍺: r ⋄ b←⊃⍺ ⋄ L←(d.DL○b÷180){b1←,⍺×⍥×⍵ ⋄ pa ea←↓⍉gu[b1/,⍺;]
+            pw ew←↓⍉gu[b1/,⍵;] ⋄ (⍴⍵)⍴((pa=pw)∧⍺⍺>ea d.D ew)@(b1⍨)≠⍨,⍵}
+        _←{⍺⍺{1+(∊⍴⍨¨≢¨⊆⍨⍵)@⊢⍵}⍤1⍺⍺ ⍺⍴⍵L 1⍵⍵ ⍵} ⋄ r,((⍴g)⊢_⌽g)((⍴g)⍉_⊖g)}
     REL←{p e v←3↑⍵ ⋄ q←↑∪,∘.(⌊,⌈)⍨⍳≢⊃pu eu gu gv←4↑v WGT p e ⋄ d←⍺ DNS eu            ⍝ relative weights (topology)
         mi←(2⍴≢gu)⍴⊃⌽mu mi←{u(⍵⍳⍨u←∪⍵)},((↓q)⍳∘.(⌊,⌈)⍨⊣/gu),¨↑(⊂d.D¨⊢)⊢/gu
         r←((⊢⍴⍨2⍴≢)gv)×mi{⍵[⍺]}⍤1⊢(0⍴⍨≢mu){r←⍺ ⋄ r[⍵]+←gv ⋄ r}⍤1⊢mi
-        (3↑w),{(⊢÷⍤1 0+/)r×⍵[mu[mi]]}¨¯1(↓,(4-≢⍤⊢)⍴↑)4↓⍵}    
+        (3↑⍵),{(⊢÷⍤1 0+/)r×⍵[mu[mi]]}¨¯1(↓,(4-≢⍤⊢)⍴↑)4↓⍵}
     VOL←{pu eu gu gv _ xy←6↑⍵,⊂1 1 ⋄ pu[⊣/gu](eu[⊢/gu;])(gv××/xy)}                   ⍝ volumes
     MGV←{⍺←1 ⋄ iu ea vu←⍪⌿⍉↑1 1 ⍺×↓⍉↑⍵ ⋄ VOL vu WGT iu ea}                           ⍝ merge volumes
     MGM←{⍺←1 ⋄ q m←↓⍉↑⍵ ⋄ r←0⍴⍨(≢pu←∪⊃⍪/q),1↓⍴⊃m ⋄ pu r⊣q{r[pu⍳⍺;]+←⍵}¨⍺×m}          ⍝ merge misorientations
