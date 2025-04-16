@@ -85,6 +85,31 @@ deformation of each grain.
 
 See [example](eg.apls).
 
+### Experimental microstructures
+
+The `MICRO` function is provided to process experimental data. It can generate
+the input needed by `CPFEH` either from EBSD `.ang` files or from (discrete)
+distributions of crystallographic orientations and disorientation angles on
+different planes.
+
+Usage:
+
+    p e x y      ← aci MICRO  f[crop]          ⍝ grid and cell size from ang file
+    p e v[q m n] ← [d] MICRO  a c i f[crop]    ⍝ volumes and disorientations from ang
+    p e v[q m n] ← [d] MICRO  p e s            ⍝ volumes and disorientations from ang
+    p e v x y z  ←  d  MICRO  p e v q m[n o]   ⍝ CPFEH parameters from distributions
+    p e v        ← [v] MICRO,⊂p e v            ⍝ merge volumes
+    q m          ← [v] MICRO,⊂q m              ⍝ merge disorientations
+    d            ←  d  MICRO  e                ⍝ disorientations namespace
+
+Parameters:
+
+    - `f[crop]` EBSD ang file and optional crop region (four additional `x0 x1 y0 y1` parameters)
+    - `a c i` angle increment (zero to not round) and minimum image quality and confidence index
+    - `d` disorientation increment or disorientation namespace
+    - `p e v` phases, euler angles and volumes
+    - `q m n z` pairs of phases and istributions of disorientations in x y z directions
+
 ## References
 
 - [A self-consistent anisotropic approach for the simulation of plastic
