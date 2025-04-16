@@ -24,27 +24,29 @@
         x y←c[_x _y] ⋄ ∆x←⌈/|2-/x ⋄ ny←(≢x)÷nx←⌈1+∆x÷⍨(⌈/-⌊/)x ⋄ ∆y←ny÷⍨(⌈/-⌊/)y
         ea←⍉↑(○da÷180)(⊣×∘⌊0.5+÷⍨)⍣(da>0)⊢(○2)|c[_e]
         (ny nx⍴¯1@(∊iq ci∨.>c[_i _c]⍨)_p⊃c)ea(∆x ∆y)}
-    DIS←{0=⎕NC'⍺': VOL ⍵ ⋄ pu eu gu gv g←5↑⍵ ⋄ d←(⊃⌽⍺)DNS eu ⋄ q←↑∪,∘.(⌊,⌈)⍨⍳≢pu     ⍝ disorientations and sizes
+    DIS←{pu eu gu gv g←5↑⍵ ⋄ g⍪←g,←0 ⋄ d←(⊃⌽⍺)DNS eu ⋄ q←↑∪,∘.(⌊,⌈)⍨⍳≢pu             ⍝ disorientations and sizes
         D←{r←⍵ ⋄ r[(⊣/d.D⊢/)⍺]+←1 ⋄ r}{p e←↓⍉gu ⋄ k←(⍳≢q),q⍳(↑⌊/,¨⌈/)p[2↑[2]⍵]
             e←1↓¨k⊂⍤⊢⌸q⍪e[2↑[2]⍵] ⋄ (⊢÷(+⌿+⌿))↑e ⍺⍺¨↓0⍴⍨(≢q),d.DL○1}∘(,∘≢⌸↑)
-        r←(VOL ⍵),(⊂pu[q]),(+/gv)×D¨{_←{,1(⊢(⌊,⌈)¨⍺⍺)⍵} ⋄ {⍵/⍨0<⊃¨⍵}¨(⌽_⍵)(⊖_⍵)}g
+        r←(6↑⍵),(⊂pu[q]),(+/gv)×D¨{_←{,1(⊢(⌊,⌈)¨⍺⍺)⍵} ⋄ {⍵/⍨0<⊃¨⍵}¨(⌽_⍵)(⊖_⍵)}g
         1=≢⍺: r ⋄ b←d.DL○(⊃⍺)÷180 ⋄ _←{⍺⍺{1+(∊⍴⍨¨≢¨⊆⍨⍵)@⊢⍵}⍤1⍺⍺(⍴⍵)⍴⍵L 1⍵⍵ ⍵}
         L←{({(=⌿⊣/⍵)∧b>d.D⌿⊢/⍵}gu[w/↑,¨⍺ ⍵;])@(w⍨)≠⍨w←,⍺×⍥×⍵} ⋄ r,(⊢_⌽g)(⍉_⊖g)}
     REL←{p e v←3↑⍵ ⋄ q←↑∪,∘.(⌊,⌈)⍨⍳≢⊃pu eu gu gv←4↑v WGT p e ⋄ d←⍺ DNS eu            ⍝ relative weights (topology)
         mi←(2⍴≢gu)⍴⊃⌽mu mi←{u(⍵⍳⍨u←∪⍵)},((↓q)⍳∘.(⌊,⌈)⍨⊣/gu),¨↑(⊂d.D¨⊢)⊢/gu
         r←((⊢⍴⍨2⍴≢)gv)×mi{⍵[⍺]}⍤1⊢(0⍴⍨≢mu){r←⍺ ⋄ r[⍵]+←gv ⋄ r}⍤1⊢mi
         (3↑⍵),{(⊢÷⍤1 0+/)r×⍵[mu[mi]]}¨¯1(↓,(4-≢⍤⊢)⍴↑)4↓⍵}
-    VOL←{pu eu gu gv _ xy←6↑⍵,⊂1 1 ⋄ pu[⊣/gu](eu[⊢/gu;])(gv××/xy)}                   ⍝ volumes
+    VOL←{pu eu gu gv _ xy←6↑⍵,⊂1 1 ⋄ pu[⊣/gu](eu[⊢/gu;])(gv××/xy),6↓⍵}               ⍝ volumes
     MGV←{⍺←1 ⋄ iu ea vu←⍪⌿⍉↑1 1 ⍺×↓⍉↑⍵ ⋄ VOL vu WGT iu ea}                           ⍝ merge volumes
     MGM←{⍺←1 ⋄ q m←↓⍉↑⍵ ⋄ r←0⍴⍨(≢pu←∪⊃⍪/q),1↓⍴⊃m ⋄ pu r⊣q{r[pu⍳⍺;]+←⍵}¨⍺×m}          ⍝ merge misorientations
 
-    :If 0=⎕NC'a' ⋄ a←⊢ ⋄ :EndIf ⋄ :If 2=≢⍴w ⋄ r←a DNS w                              ⍝ d            ←  d  MICRO  e
-    :ElseIf 1=≢∪⍴¨w ⋄ :If 80=⎕DR w ⋄ r←ANG(3↑a,0),⊂w ⋄ :Else ⋄ :Select ≢⊃w           ⍝ p e x y      ←  a  MICRO  f
+    :If 0=⎕NC'a' ⋄ a←⊢ ⋄ :EndIf
+    :If 2=≢⍴w ⋄ r←a DNS w                                                            ⍝ d            ←  d  MICRO  e
+    :ElseIf 80=⎕DR w ⋄ r←ANG(3↑a,0),⊂w                                               ⍝ p e x y      ←  a  MICRO  f
+    :ElseIf 1=≢∪⍴¨w ⋄ :Select ≢⊃w
         :Case 2 ⋄ r←a MGM w                                                          ⍝ q m          ← [v] MICRO,⊂q m
-        :Case 3 ⋄ r←a MGV w ⋄ :EndSelect ⋄ :EndIf                                    ⍝ p e v        ← [v] MICRO,⊂p e v
+        :Case 3 ⋄ r←a MGV w ⋄ :EndSelect                                             ⍝ p e v        ← [v] MICRO,⊂p e v
     :Else ⋄ :Select ≢w
-        :Case 4 ⋄ r←a DIS WGT ANG w                                                  ⍝ p e v[q m n] ← [d] MICRO  a c i f
-        :Case 3 ⋄ r←a DIS WGT w                                                      ⍝ p e v[q m n] ← [d] MICRO  p e s
+        :Case 4 ⋄ r←VOL a DIS⍣(3≠⊃⎕NC'a')WGT ANG w                                   ⍝ p e v[q m n] ← [d] MICRO  a c i f
+        :Case 3 ⋄ r←VOL a DIS⍣(3≠⊃⎕NC'a')WGT w                                       ⍝ p e v[q m n] ← [d] MICRO  p e s
         :Else ⋄ r←a REL w ⋄ :EndSelect                                               ⍝ p e v x y z  ←  d  MICRO  p e v q m[n o]
     :EndIf
 ∇
