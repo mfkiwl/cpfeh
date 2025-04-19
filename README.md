@@ -122,6 +122,11 @@ and practical applications][2]. CN Tome, RA Lebensohn. 2023
 its integration with implicit finite element schemes][3]. J Galán, P Verleysen, RA Lebensohn.
 Modelling and Simulation in Materials Science and Engineering, 2014
 
+- [A multivariate grain size and orientation distribution function: derivation from
+electron backscatter diffraction data and applications][4]. J Galán López, LAI Kestens.
+Applied Crystallography. 2021
+
 [1]: https://www.sciencedirect.com/science/article/abs/pii/095671519390130K
 [2]: https://www.sciencedirect.com/book/9780128207130/material-modeling-with-the-visco-plastic-self-consistent-vpsc-approach
 [3]: https://iopscience.iop.org/article/10.1088/0965-0393/22/5/055023/meta
+[4]: https://journals.iucr.org/paper?S1600576720014909
