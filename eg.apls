@@ -17,7 +17,7 @@ wr←0                                 ⍝ angular velocity
 st←6⍴0                               ⍝ stress
 tol←1e¯3                             ⍝ tolerance
 min←1e¯2                             ⍝ min time increment
-max←100                              ⍝ max iterations
+max←50                               ⍝ max iterations
 conv←0.1 0.9 1.1 1.25                ⍝ down up inc dec
 
 I←9 0∘⍕ ⋄ D←9 2∘⍕ ⋄ S←9 ¯3∘⍕ ⍝ integer decimal scientific
@@ -29,6 +29,7 @@ SIM←{
 }
 
 ⎕←¯10↑¨7↑¨'grains' 'steps' '∆time' 'iter' 'seconds'
+⎕←SIM  50  50 0.25
 ⎕←SIM  50 100 0.25
 ⎕←SIM 100 100 0.25
 ⎕←SIM 250 100 0.25
