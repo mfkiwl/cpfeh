@@ -4,7 +4,7 @@
 ⎕FX⊃⎕NGET'APLSource/MATERIAL.aplf'1
 ⎕FX⊃⎕NGET'APLSource/CPFEH.aplf'1
 
-n←250                                ⍝ count
+n←1e3                                ⍝ count
 bcc←'materials/fe_bcc.json5'         ⍝ bcc iron
 fcc←'materials/fe_fcc.json5'         ⍝ fcc iron
 mat←?n⍴≢m←MATERIAL¨bcc fcc           ⍝ material
@@ -16,23 +16,23 @@ sr←1e¯3,5⍴0                          ⍝ strain rate
 wr←0                                 ⍝ angular velocity
 st←6⍴0                               ⍝ stress
 tol←1e¯3                             ⍝ tolerance
-max←500                              ⍝ max iterations
-conv←0.1 0.9 1.25 1.5                ⍝ down up inc dec
+min←1e¯2                             ⍝ min time increment
+max←100                              ⍝ max iterations
+conv←0.1 0.9 1.1 1.25                ⍝ down up inc dec
 
 I←9 0∘⍕ ⋄ D←9 2∘⍕ ⋄ S←9 ¯3∘⍕ ⍝ integer decimal scientific
 SIM←{
     ⍺←⍬ ⋄ o n t←⍵ ⋄ e←o↑¨ea ⋄ v i←o↑¨vol mat ⋄ a←o o∘↑¨area
-    r e f←n t bc sr wr st(tol max CPFEH conv)m[i]e a v⊣ts←⎕TS
+    r e f←n t bc sr wr st(tol min max CPFEH conv)m[i]e a v⊣ts←⎕TS
     _←(↓[1]r)(e,⊂v)(,f)⎕CSV⍠'IfExists' 'Replace'¨⍣(~0∊⍴⍺)⊢⍺
-    ⍺,⍨10↑¨(2(I¨⍤↑,S¨⍤↓)⍵),(I¨+⌿¯2↑[2]r),⊂D 1e3÷⍨⎕TS-⍥(12⎕DT⊂)ts
+    ⍺,⍨10↑¨(2(I¨⍤↑,S¨⍤↓)⍵),(I¨+⌿¯1↑[2]r),⊂D 1e3÷⍨⎕TS-⍥(12⎕DT⊂)ts
 }
 
-⎕←¯10↑¨7↑¨'grains' 'steps' '∆time' 'iter' 'iterc' 'seconds'
-⎕←SIM  50 10 0.05
-⎕←SIM 100 10 0.05
-⎕←SIM 150 10 0.05
-⎕←SIM 200 10 0.05
-⎕←SIM 250 10 0.05
-⎕←SIM 50 100 0.05
-⎕←SIM 50 500 0.05
-⎕←'r.csv' 'tex.csv' 'f.csv'SIM 50 1000 0.05
+⎕←¯10↑¨7↑¨'grains' 'steps' '∆time' 'iter' 'seconds'
+⎕←SIM  50 100 0.25
+⎕←SIM 100 100 0.25
+⎕←SIM 250 100 0.25
+⎕←SIM 500 100 0.25
+⎕←SIM  50 250 0.25
+⎕←SIM  50 500 0.25
+⎕←'r.csv' 'tex.csv' 'f.csv'SIM 1000 1000 0.25
