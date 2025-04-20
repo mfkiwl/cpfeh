@@ -17,15 +17,16 @@
          bu∘←(↓[1]+.×∘⌹vu+.×⊢)(↑[÷2]ju)((j+⊢)⌹⍨∘↑j+⊣)⍤2⊢jv∘←(i6-⍤2⊢+.×∘⌹vu+.×i6-⍤2⊢)jv       ⍝   localisation tensors
          ∆←⊃bo(~bo)(⊢+j+.×⊣).×so(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu←(su+.×⍨,⌿ku)+t T msu×⍤¯1⊢esu)    ⍝   global error
          ∆u∘←(e-eu)+(↓[1]jv)+.×s-su ⋄ x∘←⌈/⍤|¨∆(⌈/⍤|¨∆u) ⋄ d ⍺⍺¨←↓⍉⌽↑x y                     ⍝   local error and factor
-         xb∘←2÷⍨⌈/∊|bu-⊃⌽⍵ ⋄ (su+⊃d+.×(bu+.×j⌹⍨∆)(↓[1](j+⍤2⊢jv)⌹⍨⍤¯1↑[÷2]∆u))bu              ⍝   correction
-        }⍣{(×÷max-is∘←is+1)∧tol∧.>xb,(y∘←x)÷t×⌈/|vo}∘{d y is∘←(2⍴conv[2])(2⍴tol)0 ⋄ ⍵}
-     tol min max←⍺⍺ ⋄ conv←⍵⍵ ⋄ n t bo vo wo so←⍺ ⋄ m←∪⊃mat ea area vol←4↑⍵                  ⍝ parameters
+         (su+⊃d+.×(bu+.×j⌹⍨∆)(↓[1](j+⍤2⊢jv)⌹⍨⍤¯1↑[÷2]∆u))bu                                  ⍝   correction
+     }⍣{(×÷max-is∘←is+1)∧tol∧.>(y∘←x)÷t×⌈/|vo:tol>2÷⍨⌈/∊|⍺-⍥(⊃⌽)⍵ ⋄ 0                        ⍝   convergence
+     }∘{d y is∘←(2⍴conv[2])(2⍴tol)0 ⋄ ⍵}
+     (tol min max)conv←⍺⍺ ⍵⍵ ⋄ n t bo vo wo so←⍺ ⋄ m←∪⊃mat ea area vol←4↑⍵ ⋄ g hs←m.g m.hs   ⍝ parameters
      iu vuvd vu ru∘←{⍺[⍵](⍵ ⍵∘⌷¨(⊢÷⍤1 0+/)¨area)((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}∘⍋⍨m⍳mat          ⍝ microstructure
      ku ssu∘←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu∘←+_ ssu           ⍝ behaviour
      at ae as au asu tsu fu∘←7↑(≢vu){0(6⍴0)(6⍴0)(↓6 ⍺⍴0)0 m.z(i3×⊂⍺⍴1)}⍣(4=≢⍵)⊢4↓⍵           ⍝ initialise
      su bu∘←(≢vu){(↓6 ⍺⍴0)i6}⍣(13≠≢⍵)⊢11↓⍵ ⋄ (E ru)fu,⍨⊂{bs∘←bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu        ⍝ simulation
-        su bu is∘←((2×so)-vu+.×⍨↑au)t{min>⊃⌽⍺: ⍵ ⋄ 11:: (⍺÷2)∇⍣2⊢⍵+0 0 is                    ⍝   divide & conquer
-            at ae as au+←t e s,1↑su bu←⍺ S 2↑⍵ ⋄ is∘←is+⊃⌽⍵ ⋄ su bu is}su bu 0               ⍝   solve stress
-        tsu+←m.(⊃H/)↓⍉↑asu(t×esu) ⋄ asu+←t×|esu ⋄ fu+.×⍨←i3+t T ssu×⍤¯1⊢esu ⋄ ru W←esu       ⍝   update
-        ⍵⍪at,ae,as,is}⍣n⊢1 14⍴0
+         su bu is∘←((2×so)-vu+.×⍨↑au)t{min>⊃⌽⍺:⍵ ⋄ 11::(⍺÷2)∇⍣2⊢⍵+0 0 is                     ⍝   divide & conquer
+             at ae as au+←t e s,1↑su bu←⍺ S 2↑⍵ ⋄ is∘←is+⊃⌽⍵ ⋄ su bu is}su bu 0              ⍝   solve stress
+         tsu+←m.(⊃H/)↓⍉↑asu(t×esu) ⋄ asu+←t×|esu ⋄ fu+.×⍨←i3+t T ssu×⍤¯1⊢esu ⋄ ru W←esu      ⍝   update
+         ⍵⍪at,ae,as,is}⍣n⊢1 14⍴0
  }
