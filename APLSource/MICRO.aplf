@@ -1,53 +1,61 @@
-∇ r←{a}MICRO w
-    DNS←{~2|⎕DR ⍺: ⍺ ⋄ ea←↓⍉↑⍵                                                       ⍝ disorientations namespace
-        c←↑(1 2 3 4)(2 1 4 3)(3 4 1 2)(4 3 2 1)                                      ⍝     product components
-        u←↑(1 ¯1 ¯1 ¯1)(1 1 1 ¯1)(1 ¯1 1 1)(1 1 ¯1 1)                                ⍝     product unit factors
-        QP←+/u×⊣(×⍤1)(⊂c)⌷⊢ ⋄ QC←×∘(1,-3⍴1) ⋄ QD←+.×                                 ⍝     product, conjugate, dot product
-        RD←180÷⍨○ ⋄ UV←×∘(÷(÷2)*⍨+.×⍨)⍨ ⋄ (x y z)←=∘⊂⍨⍳3                             ⍝     degrees and unit vectors
-        QA←((⊂2○⊢),(⊂1○⊢)∘.×∘UV{⍺←z ⋄ ⍺})∘(÷∘2) ⋄ QE←⊃{⍺←z x z ⋄ ⍺}QP.QA⊢            ⍝     quaternion from axis-angle or zxz
-        cs←⊂1 0 0 0 ⋄ cs,←,(1 0 0)(0 1 0)(0 0 1)∘.QA○1 2 3÷2                         ⍝     identity, 4-fold symmetry <001>
-        cs,←,(1 1 1)(¯1 1 1)(1 ¯1 1)(1 1 ¯1)∘.QA○2 4÷3                               ⍝     3-fold symmetry <111>
-        cs,←,(1 1 0)(1 0 1)(0 1 1)(1 ¯1 0)(¯1 0 1)(0 1 ¯1)∘.QA○1                     ⍝     2-fold symmetry <110>
-        DC←⊃2×¯2○1⌊cs⌈.(|QD)∘⊂QC⍤QP∘QC ⋄ DL←⌊(○⍺)÷⍨180×⊢                             ⍝     disorientation (cubic) and level
-        ID←⌈(⊢+2÷⍨(1-⍨⊣)×2-⍨⊣)⌊ ⋄ CD←{(c←⎕NS⍬).c←0⍴⍨⍵ID.-0 1 ⋄ c}                    ⍝     index and cache of disorientations
-        _M_←{(c s)←⍺⍺ ⍵⍵ ⋄ (a w)←(⊂,d←⍺≠⍵)/∘,¨⍺ ⍵ ⋄ 0=≢a:d                           ⍝     disorientations with memoization
-            n←(≠,i)∧s.c[i←a ID w]<1 ⋄  0=≢p←n/⍥,i:s.c[i]@⊢d                          ⍝       return calculated if all done
-            s.c[p]←DL⊃a DC⍥{↓⍉↑c[n/⍵]}w ⋄ s.c[i]@⊢d}                                 ⍝       calculate and return
-        D←1+q _M_(CD≢q←↓⍉↑QE ea) ⋄ DISORI⊣'DISORI'⎕NS'DC' 'ID' 'DL' 'D'}
-    WGT←{⍺←1 ⋄ ph ea←2↑⍵ ⋄ v←⍺                                                       ⍝ weights of unique grains
-        G←{i v←↓⍉{⍵[{s⌿⍨⍵[s←⍒⍵]>0}⊢/⍵;]}(⍳⍨⍺),∘(+⌿)⌸⍵ ⋄ (⍺⌷[1]⍨⊂i)v}
-        pu pv←(,ph)G⊢v←v×0≤,ph ⋄ eu ev←ea G⊢v←v×0<p←1-⍨(¯1∪pu)⍳,ph
-        gu gv←(pe←⍉↑p e)G⊢v←v×0<e←(eu⍳(v>0)⌿ea)@(>∘0)v
-        (2↓⍵),⍨(pu~¯1)eu gu gv,⊂(⍴ph)⍴(gu⍳(v>0)⌿pe)@(>∘0)v}
-    ANG←{da iq ci file←4↑⍵ ⋄ ⍺←⍬ ⋄ _e _y _x _i _c _p←3(⊂⍤↑,↓)⍺⊣⍣(~0∊⍴⍺)⊢(⍳3),3+⍳5    ⍝ read ang file
-        c←⎕CSV('(^\s+)|(\s+$)' '\s+'⎕R'' ','{⍵/⍨~'#'∊¨⍵}⊃⎕NGET file 1)'N'2 0
-        c←↓⍉c{0∊⍴⍵: ⍺ ⋄ x y←↓⍉c[;_x _y] ⋄ ⍺⌿⍨∊(x y∧.≤2↓⍵)∧x y∧.≥2↑⍵}4↓⍵
-        x y←c[_x _y] ⋄ ∆x←⌈/|2-/x ⋄ ny←(≢x)÷nx←⌈1+∆x÷⍨(⌈/-⌊/)x ⋄ ∆y←ny÷⍨(⌈/-⌊/)y
-        b←∊iq ci∨.>c[_i _c] ⋄ ea←(○da÷180){(⍺÷2)+⍺×⌊⍵÷⍺}⍣(da>0)⊢(○2)|c[_e]
-        (ny nx⍴¯1@(b⍨)_p⊃c)(⍉↑ea)(∆x ∆y)}
-    DIS←{pu eu gu gv g←5↑⍵ ⋄ g⍪←g,←0 ⋄ d←(⊃⌽⍺)DNS eu ⋄ q←↑∪,∘.(⌊,⌈)⍨⍳≢pu             ⍝ disorientations and sizes
-        D←{r←⍵ ⋄ r[(⊣/d.D⊢/)⍺]+←1 ⋄ r}{p e←↓⍉gu ⋄ k←(⍳≢q),q⍳(↑⌊/,¨⌈/)p[2↑[2]⍵]
-            e←1↓¨k⊂⍤⊢⌸q⍪e[2↑[2]⍵] ⋄ (⊢÷(+⌿+⌿))↑e ⍺⍺¨↓0⍴⍨(≢q),d.DL○1}∘(,∘≢⌸↑)
-        r←(6↑⍵),(⊂pu[q]),(+/gv)×D¨{_←{,1(⊢(⌊,⌈)¨⍺⍺)⍵} ⋄ {⍵/⍨0<⊃¨⍵}¨(⌽_⍵)(⊖_⍵)}g
-        1=≢⍺: r ⋄ b←d.DL○(⊃⍺)÷180 ⋄ _←{⍺⍺{1+(∊⍴⍨¨≢¨⊆⍨⍵)@⊢⍵}⍤1⍺⍺(⍴⍵)⍴⍵L 1⍵⍵ ⍵}
-        L←{({(=⌿⊣/⍵)∧b>d.D⌿⊢/⍵}gu[w/↑,¨⍺ ⍵;])@(w⍨)≠⍨w←,⍺×⍥×⍵} ⋄ r,(⊢_⌽g)(⍉_⊖g)}
-    REL←{p e v←3↑⍵ ⋄ q←↑∪,∘.(⌊,⌈)⍨⍳≢⊃pu eu gu gv←4↑v WGT p e ⋄ d←⍺ DNS eu            ⍝ relative weights (topology)
-        mi←(2⍴≢gu)⍴⊃⌽mu mi←{u(⍵⍳⍨u←∪⍵)},((↓q)⍳∘.(⌊,⌈)⍨⊣/gu),¨↑(⊂d.D¨⊢)⊢/gu
-        r←((⊢⍴⍨2⍴≢)gv)×mi{⍵[⍺]}⍤1⊢(0⍴⍨≢mu){r←⍺ ⋄ r[⍵]+←gv ⋄ r}⍤1⊢mi
-        (3↑⍵),{(⊢÷⍤1 0+/)r×⍵[mu[mi]]}¨¯1(↓,(4-≢⍤⊢)⍴↑)4↓⍵}
-    VOL←{pu eu gu gv _ xy←6↑⍵,⊂1 1 ⋄ pu[⊣/gu](eu[⊢/gu;])(gv××/xy),6↓⍵}               ⍝ volumes
-    MGV←{⍺←1 ⋄ iu ea vu←⍪⌿⍉↑1 1 ⍺×↓⍉↑⍵ ⋄ VOL vu WGT iu ea}                           ⍝ merge volumes
-    MGM←{⍺←1 ⋄ q m←↓⍉↑⍵ ⋄ r←0⍴⍨(≢pu←∪⊃⍪/q),1↓⍴⊃m ⋄ pu r⊣q{r[pu⍳⍺;]+←⍵}¨⍺×m}          ⍝ merge misorientations
+ r←{a}MICRO w
+ DNS←{~2|⎕DR ⍺:⍺ ⋄ ea←↓⍉↑⍵                                                           ⍝ disorientations namespace
+     c←↑(1 2 3 4)(2 1 4 3)(3 4 1 2)(4 3 2 1)                                         ⍝     product components
+     u←↑(1 ¯1 ¯1 ¯1)(1 1 1 ¯1)(1 ¯1 1 1)(1 1 ¯1 1)                                   ⍝     product unit factors
+     QP←+/u×⊣(×⍤1)(⊂c)⌷⊢ ⋄ QC←×∘(1,-3⍴1) ⋄ QD←+.×                                    ⍝     product, conjugate, dot product
+     RD←180÷⍨○ ⋄ UV←×∘(÷(÷2)*⍨+.×⍨)⍨ ⋄ (x y z)←=∘⊂⍨⍳3                                ⍝     degrees and unit vectors
+     QA←((⊂2○⊢),(⊂1○⊢)∘.×∘UV{⍺←z ⋄ ⍺})∘(÷∘2) ⋄ QE←⊃{⍺←z x z ⋄ ⍺}QP.QA⊢               ⍝     quaternion from axis-angle or zxz
+     cs←⊂1 0 0 0 ⋄ cs,←,(1 0 0)(0 1 0)(0 0 1)∘.QA○1 2 3÷2                            ⍝     identity, 4-fold symmetry <001>
+     cs,←,(1 1 1)(¯1 1 1)(1 ¯1 1)(1 1 ¯1)∘.QA○2 4÷3                                  ⍝     3-fold symmetry <111>
+     cs,←,(1 1 0)(1 0 1)(0 1 1)(1 ¯1 0)(¯1 0 1)(0 1 ¯1)∘.QA○1                        ⍝     2-fold symmetry <110>
+     DC←⊃2×¯2○1⌊cs⌈.(|QD)∘⊂QC⍤QP∘QC ⋄ DL←⌊(○⍺)÷⍨180×⊢                                ⍝     disorientation (cubic) and level
+     ID←⌈(⊢+2÷⍨(1-⍨⊣)×2-⍨⊣)⌊ ⋄ CD←{(c←⎕NS ⍬).c←0⍴⍨⍵ ID.-0 1 ⋄ c}                     ⍝     index and cache of disorientations
+     _M_←{(c s)←⍺⍺ ⍵⍵ ⋄ (a w)←(⊂,d←⍺≠⍵)/∘,¨⍺ ⍵ ⋄ 0=≢a:d                              ⍝     disorientations with memoization
+         n←(≠,i)∧s.c[i←a ID w]<1 ⋄ 0=≢p←n/⍥,i:s.c[i]@⊢d                              ⍝       return calculated if all done
+         s.c[p]←DL⊃a DC⍥{↓⍉↑c[n/⍵]}w ⋄ s.c[i]@⊢d}                                    ⍝       calculate and return
+     D←1+q _M_(CD≢q←↓⍉↑QE ea) ⋄ DISORI⊣'DISORI'⎕NS'DC' 'ID' 'DL' 'D'}
+ WGT←{⍺←1 ⋄ ph ea←2↑⍵ ⋄ v←⍺                                                          ⍝ weights of unique grains
+     G←{i v←↓⍉{⍵[{s⌿⍨⍵[s←⍒⍵]>0}⊢/⍵;]}(⍳⍨⍺),∘(+⌿)⌸⍵ ⋄ (⍺⌷[1]⍨⊂i)v}
+     pu pv←(,ph)G⊢v←v×0≤,ph ⋄ eu ev←ea G⊢v←v×0<p←1-⍨(¯1∪pu)⍳,ph
+     gu gv←(pe←⍉↑p e)G⊢v←v×0<e←(eu⍳(v>0)⌿ea)@(>∘0)v
+     (2↓⍵),⍨(pu~¯1)eu gu gv,⊂(⍴ph)⍴(gu⍳(v>0)⌿pe)@(>∘0)v}
+ ANG←{da iq ci file←4↑⍵ ⋄ ⍺←⍬ ⋄ _e _y _x _i _c _p←3(⊂⍤↑,↓)⍺⊣⍣(~0∊⍴⍺)⊢(⍳3),3+⍳5       ⍝ read ang file
+     c←⎕CSV('(^\s+)|(\s+$)' '\s+'⎕R'' ','{⍵/⍨~'#'∊¨⍵}⊃⎕NGET file 1)'N' 2 0
+     c←↓⍉c{0∊⍴⍵:⍺ ⋄ x y←↓⍉c[;_x _y] ⋄ ⍺⌿⍨∊(x y∧.≤2↓⍵)∧x y∧.≥2↑⍵}4↓⍵
+     x y←c[_x _y] ⋄ ∆x←⌈/|2-/x ⋄ ny←(≢x)÷nx←⌈1+∆x÷⍨(⌈/-⌊/)x ⋄ ∆y←ny÷⍨(⌈/-⌊/)y
+     ea←(○da÷180){(⍺÷2)+⍺×⌊⍵÷⍺}⍣(da>0)⊢(○2)|c[_e]
+     (ny nx⍴¯1@(∊iq ci∨.>c[_i _c]⍨)_p⊃c)(⍉↑ea)(∆x ∆y)}
+ CTF←{da iq ci file←4↑⍵ ⋄ ⍺←⍬ ⋄ _e _y _x _i _c _p←(6 7 8)3 2 10 9 1 ⋄ ∆x←∆y←0        ⍝ read ctf file
+     c←⎕CSV('(^\s+)|(\s+$)' '\s+'⎕R'' ','{⍵/⍨{
+             'XStep'≡5↑⍵:0⊣∆x⊢←⊃'^XStep\s+(.*)'⎕S{2⊃⎕VFI⊃↓/⍵.(Offsets,⊂Match)}⍵
+             'YStep'≡5↑⍵:0⊣∆y⊢←⊃'^YStep\s+(.*)'⎕S{2⊃⎕VFI⊃↓/⍵.(Offsets,⊂Match)}⍵
+             ∧/⍵∊⎕D,' .-',⎕UCS 9}¨⍵}⊃⎕NGET file 1)'N' 2 0
+     c←↓⍉c{0∊⍴⍵:⍺ ⋄ x y←∆x ∆y×⍤1↓⍉⍺[;_x _y] ⋄ ⍺⌿⍨∊(x y∧.≥2↑⍵)∧x y∧.<2↓⍵}4↓⍵
+     nx ny←(1+⌈/-⌊/)¨c[_x _y] ⋄ ea←(○÷180⍨)da{(⍺÷2)+⍺×⌊⍵÷⍺}⍣(da>0)⊢360|c[_e]
+     (ny nx⍴¯1@((∊iq ci∨.>c[_i _c])∨0∘=)_p⊃c)(⍉↑ea)(∆x ∆y)}
+ DIS←{pu eu gu gv g←5↑⍵ ⋄ g⍪←g,←0 ⋄ d←(⊃⌽⍺)DNS eu ⋄ q←↑∪,∘.(⌊,⌈)⍨⍳≢pu                ⍝ disorientations and sizes
+     D←{r←⍵ ⋄ r[(⊣/d.D⊢/)⍺]+←1 ⋄ r}{p e←↓⍉gu ⋄ k←(⍳≢q),q⍳(↑⌊/,¨⌈/)p[2↑[2]⍵]
+         e←1↓¨k⊂⍤⊢⌸q⍪e[2↑[2]⍵] ⋄ (⊢÷(+⌿+⌿))↑e ⍺⍺¨↓0⍴⍨(≢q),d.DL○1}∘(,∘≢⌸↑)
+     r←(6↑⍵),(⊂pu[q]),(+/gv)×D¨{_←{,1(⊢(⌊,⌈)¨⍺⍺)⍵} ⋄ {⍵/⍨0<⊃¨⍵}¨(⌽_ ⍵)(⊖_ ⍵)}g
+     1=≢⍺:r ⋄ b←d.DL○(⊃⍺)÷180
+     _←{b←⍵>0 ⋄ b(⍺⍺{1+@(⍺∧(~⍵)⍨)(∊⍴⍨¨≢¨⊆⍨⍵)@⊢⍵}⍤1)⍺⍺(⍴⍵)⍴⍵ L 1 ⍵⍵ ⍵}
+     L←{({(=⌿⊣/⍵)∧b>d.D⌿⊢/⍵}gu[w/↑,¨⍺ ⍵;])@(w⍨)-≠⍨w←,⍺×⍥×⍵} ⋄ r,(⊢_⌽g)(⍉_⊖g)}
+ REL←{p e v←3↑⍵ ⋄ q←↑∪,∘.(⌊,⌈)⍨⍳≢⊃pu eu gu gv←4↑v WGT p e ⋄ d←⍺ DNS eu               ⍝ relative weights (topology)
+     mi←(2⍴≢gu)⍴⊃⌽mu mi←{u(⍵⍳⍨u←∪⍵)},((↓q)⍳∘.(⌊,⌈)⍨⊣/gu),¨↑(⊂d.D¨⊢)⊢/gu
+     r←((⊢⍴⍨2⍴≢)gv)×mi{⍵[⍺]}⍤1⊢(0⍴⍨≢mu){r←⍺ ⋄ r[⍵]+←gv ⋄ r}⍤1⊢mi
+     (3↑⍵),{(⊢÷⍤1 0+/)r×⍵[mu[mi]]}¨¯1(↓,(4-≢⍤⊢)⍴↑)4↓⍵}
+ VOL←{pu eu gu gv _ xy←6↑⍵,⊂1 1 ⋄ pu[⊣/gu](eu[⊢/gu;])(gv×⊃×/xy),6↓⍵}                 ⍝ volumes
+ MGV←{⍺←1 ⋄ iu ea vu←⍪⌿⍉↑1 1 ⍺×↓⍉↑⍵ ⋄ VOL vu WGT iu ea}                              ⍝ merge volumes
+ MGM←{⍺←1 ⋄ q m←↓⍉↑⍵ ⋄ r←0⍴⍨(≢pu←∪⊃⍪/q),1↓⍴⊃m ⋄ pu r⊣q{r[pu⍳⍺;]+←⍵}¨⍺×m}             ⍝ merge misorientations
 
-    :If 0=⎕NC'a' ⋄ a←⊢ ⋄ :EndIf
-    :If 2=≢⍴w ⋄ r←a DNS w                                                            ⍝ d            ←  d  MICRO  e
-    :ElseIf 80=⎕DR⊃w ⋄ r←ANG(3↑a,0),1↑⊆w                                             ⍝ p e x y      ←  a  MICRO  f[crop]
-    :ElseIf 1=≢∪⍴¨w ⋄ :Select ≢⊃w
-        :Case 2 ⋄ r←a MGM w                                                          ⍝ q m          ← [v] MICRO,⊂q m
-        :Case 3 ⋄ r←a MGV w ⋄ :EndSelect                                             ⍝ p e v        ← [v] MICRO,⊂p e v
-    :Else ⋄ :Select ≢w
-        :CaseList 4 8 ⋄ r←VOL a DIS⍣(3≠⊃⎕NC'a')WGT ANG w                             ⍝ p e v[q m n] ← [d] MICRO  a c i f[crop]
-        :Case 3 ⋄ r←VOL a DIS⍣(3≠⊃⎕NC'a')WGT w                                       ⍝ p e v[q m n] ← [d] MICRO  p e s
-        :Else ⋄ r←a REL w ⋄ :EndSelect                                               ⍝ p e v x y z  ←  d  MICRO  p e v q m[n o]
-    :EndIf
-∇
+ :If 0=⎕NC'a' ⋄ a←⊢ ⋄ :EndIf
+ :If 2=≢⍴w ⋄ r←a DNS w                                               ⍝ d                 ←  d  MICRO  e
+ :ElseIf 80=⎕DR⊃w ⋄ r←{'.ctf'≡¯4↑⊃⍵:CTF(3↑a,0),⍵ ⋄ ANG(3↑a,0),⍵}⊆w   ⍝ p e s             ←  a  MICRO  f[crop]
+ :ElseIf 1=≢∪⍴¨w ⋄ :Select ≢⊃w
+     :Case 2 ⋄ r←a MGM w                                             ⍝ q m               ← [v] MICRO,⊂q m
+     :Case 3 ⋄ r←a MGV w ⋄ :EndSelect                                ⍝ p e v             ← [v] MICRO,⊂p e v
+ :Else ⋄ :Select ≢w
+     :CaseList 4 8 ⋄ r←VOL a DIS⍣(3≠⊃⎕NC'a')WGT ∇ w                  ⍝ p e v[q m n[x y]] ← [[b]d] MICRO  a c i f[crop]
+     :Case 3 ⋄ r←VOL a DIS⍣(3≠⊃⎕NC'a')WGT w                          ⍝ p e v[q m n[x y]] ← [[b]d] MICRO  p e s
+     :Else ⋄ r←a REL w ⋄ :EndSelect                                  ⍝ p e v x y z       ←     d  MICRO  p e v q m[n o]
+ :EndIf
