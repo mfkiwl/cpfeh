@@ -26,6 +26,6 @@
      su bu∘←(≢vu){(↓6 ⍺⍴0)i6}⍣(13≠≢⍵)⊢11↓⍵ ⋄ (E ru)fu,⍨⊂{bs∘←bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu        ⍝ simulation
          su bu i∘←((2×so)-vu+.×⍨↑au)t{min>⊃⌽⍺:⍵ ⋄ 11::(⍺÷2)∇⍣2⊢⍵+0 0 i                       ⍝   divide & conquer
              at ae as au+←t e s,1↑su bu←⍺ S 2↑⍵ ⋄ su bu(i+⊃⌽⍵)}su bu 0                       ⍝   solve stress
-         tsu+←m.(⊃H/)↓⍉↑asu(t×esu) ⋄ asu+←t×|esu ⋄ fu+.×⍨←i3+t T ssu×⍤¯1⊢esu ⋄ ru W←esu      ⍝   update
+         tsu+←m.(⊃H/)↓⍉↑asu(t×esu) ⋄ asu+←t×|esu ⋄ fu+.×⍨←i3+t T ssu×⍤¯1⊢esu ⋄ ru W←⊂esu     ⍝   update
          ⍵⍪at,ae,as,i}⍣n⊢1 14⍴0
  }
