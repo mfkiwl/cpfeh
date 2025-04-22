@@ -1,9 +1,9 @@
 #!/usr/local/bin/dyalogscript MAXWS=12G
 
-bcc←'materials/fe_bcc.json5' ⋄ khp←20                           ⍝ material
-da iq ci dm b←10 100 0.01 1.25 15 ⋄ file←'dc06rdnd.ctf'         ⍝ microstruture
-bc sr wr st ∆t steps←(0 1 1 0 0 0)(1e¯3,5⍴0)0(6⍴0)0.1 10       ⍝ boundary conditions
-tol min max conv←1e¯3 1e¯2 100(0.1 0.9 1.1 1.25) ⋄ grains←10   ⍝ simulation parameters
+bcc←'materials/fe_bcc.json5' ⋄ khp←20 ⋄ voce←2⍴⊂600 80 150 40    ⍝ material
+da iq ci dm b←10 100 0.01 1.25 15 ⋄ file←'dc06rdnd.ctf'          ⍝ microstruture
+bc sr wr st ∆t steps←(0 1 1 0 0 0)(1e¯3,5⍴0)0(6⍴0)0.25 1000      ⍝ boundary conditions
+tol min max conv←1e¯3 1e¯2 100(0.1 0.9 1.1 1.25) ⋄ grains←1000   ⍝ simulation parameters
 
 ⎕IO←1
 ⎕FX⊃⎕NGET'APLSource/MATERIAL.aplf'1
@@ -11,12 +11,14 @@ tol min max conv←1e¯3 1e¯2 100(0.1 0.9 1.1 1.25) ⋄ grains←10   ⍝ simul
 ⎕FX⊃⎕NGET'APLSource/CPFEH.aplf'1
 
 I←9 0∘⍕ ⋄ D←9 2∘⍕ ⋄ S←9 ¯3∘⍕ ⍝ integer decimal scientific
-SIM←{⍺←⍬ ⋄ o n t←⍵ ⋄ e←o↑¨ea ⋄ v i←o↑¨vol mat ⋄ a←o o∘↑¨area
+SIM←{⍺←⍬ ⋄ o n t←⍵ ⋄ e←o↑¨ea ⋄ v i←o↑¨vol mat ⋄ a←o o∘↑¨area ⋄ _←(e,⊂v)CSV⊃⍺
     r e f←n t bc sr wr st(tol min max CPFEH conv)m[i]e a v⊣ts←⎕TS
-    _←(↓[1]r)(e,⊂v)(,f)⎕CSV⍠'IfExists' 'Replace'¨⍣(~0∊⍴⍺)⊢⍺
+    _←(↓[1]r)(e,⊂v)(,f)CSV¨1↓⍺
     ⍺,⍨10↑¨(2(I¨⍤↑,S¨⍤↓)⍵),(I¨+⌿¯1↑[2]r),⊂D 1e3÷⍨⎕TS-⍥(12⎕DT⊂)ts}
 DMN←{H←{i←⍵ ⋄ (⌊dm÷⍨63.8){⊖⍕(⍉⍕⍪(1↓⌊⍵×m[i;⍳⍺])⍴¨'⎕')(⍉⍕⍪(1↓⌊⍵×n[i;⍳⍺])⍴¨'⎕')}÷k}
     k←⍺ ⋄ q m n←⍵ ⋄ ⍕q,⍪H¨⍳≢q}
+CSV←{f⊣⍺⎕CSV⍠'IfExists' 'Replace'⊢f←⍵,'.csv'}
+CSD←{⍺CSV⍨↓⍉((⊂'ang'),,/⍕¨q)⍪{⍵⌿⍨(0∧.=1↓⊢)⍤1⊢⍵}(dm×1-⍨⍳⊃⌽⍴⍵),⍉⍵}
 
 ⎕←'Reading ',file
     ep ee s←da iq ci MICRO file 25 25 225 225
@@ -29,13 +31,14 @@ DMN←{H←{i←⍵ ⋄ (⌊dm÷⍨63.8){⊖⍕(⍉⍕⍪(1↓⌊⍵×m[i;⍳⍺
     ⎕←'rx' 'ry' 'n' 'x' 'y' 'x×y'⍪size
     p e v q m n←d MICRO(ep+¯1 ¯1↓(1+⍴ep)⍴2⊥⍤1⍉↑r)ee s
     ⎕←50 DMN q m n
+    ⎕←('dc_tex'CSV⍨(↓⍉e),⊂v),'dc_x' 'dc_y'CSD¨m n
 ⎕←'Creating microstructure input data'
     area←¯3↑mat e vol vuvx vuvy vuvz←r←d MICRO p e v q m n ⋄ ea←↓⍉e
-    ⎕←⍕¨((⊂'mat')('phi1' 'Phi' 'phi2')(⊂'vol'))⍪¨⍪¨10↑¨mat e vol
+    ⎕←(⍕¨((⊂'mat')('phi1' 'Phi' 'phi2')(⊂'vol'))⍪¨⍪¨10↑¨mat e vol)
     ⎕←≢vol
 ⎕←'Creating material input data'
     m←(khp÷(⊢/size)*÷2){n←⎕NS⍵ ⋄ n.z+←⍺ ⋄ n}¨MATERIAL bcc
     ⎕←(⊢/size)⍪⍉↑∪¨m.z
 ⎕←'Running simulation of ',(⍕steps),' steps with ',(⍕grains),' grains'
     ⎕←¯10↑¨7↑¨'grains' 'steps' '∆time' 'iter' 'seconds'
-    ⎕←'dc_r.csv' 'dc_tex.csv' 'dc_f.csv'SIM grains steps ∆t
+    ⎕←'dc_tex0' 'dc_r' 'dc_tex1' 'dc_f'SIM grains steps ∆t
