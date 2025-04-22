@@ -11,14 +11,15 @@ tol min max conv←1e¯3 1e¯2 100(0.1 0.9 1.1 1.25) ⋄ grains←1000   ⍝ sim
 ⎕FX⊃⎕NGET'APLSource/CPFEH.aplf'1
 
 I←9 0∘⍕ ⋄ D←9 2∘⍕ ⋄ S←9 ¯3∘⍕ ⍝ integer decimal scientific
-SIM←{⍺←⍬ ⋄ o n t←⍵ ⋄ e←o↑¨ea ⋄ v i←o↑¨vol mat ⋄ a←o o∘↑¨area ⋄ _←(e,⊂v)CSV⊃⍺
+SIM←{o n t←⍵ ⋄ e←o↑¨ea ⋄ v i←o↑¨vol mat ⋄ a←o o∘↑¨area ⋄ _←(⊃⍺)TEX e,v i
     r e f←n t bc sr wr st(tol min max CPFEH conv)m[i]e a v⊣ts←⎕TS
-    w←(↓[1]r)(e,⊂v)(,f)CSV¨1↓⍺
+    w←((2⊃⍺)TEX e,v i),(↓[1]r)(,f)CSV¨2↓⍺
     w,⍨10↑¨(2(I¨⍤↑,S¨⍤↓)⍵),(I¨+⌿¯1↑[2]r),⊂D 1e3÷⍨⎕TS-⍥(12⎕DT⊂)ts}
 DMN←{H←{i←⍵ ⋄ (⌊dm÷⍨63.8){⊖⍕(⍉⍕⍪(1↓⌊⍵×m[i;⍳⍺])⍴¨'⎕')(⍉⍕⍪(1↓⌊⍵×n[i;⍳⍺])⍴¨'⎕')}÷k}
     k←⍺ ⋄ q m n←⍵ ⋄ ⍕q,⍪H¨⍳≢q}
-CSV←{f←⍵,'.csv' ⋄ 0::0↑⎕←'ERROR ',⍕⎕EN f ⋄ f⊣⍺⎕CSV⍠'IfExists' 'Replace'⊢f}
+CSV←{f←⍵,'.csv' ⋄ 0::0↑⎕←(⊃⎕DM)f ⋄ f⊣⍺⎕CSV⍠'IfExists' 'Replace'⊢f}
 CSD←{⍺CSV⍨↓⍉((⊂'ang'),,/⍕¨q)⍪{⍵⌿⍨(0∨.≠1↓⊢)⍤1⊢⍵}(dm×1-⍨⍳⊃⌽⍴⍵),⍉⍵}
+TEX←{⍺CSV⍨(⊂¨'phi1' 'Phi' 'phi2' 'vol' 'phase'),¨⍵}
 
 ⎕←'Reading ',file
     ep ee s←da iq ci MICRO file 25 25 225 225
@@ -31,7 +32,7 @@ CSD←{⍺CSV⍨↓⍉((⊂'ang'),,/⍕¨q)⍪{⍵⌿⍨(0∨.≠1↓⊢)⍤1⊢
     ⎕←'rx' 'ry' 'n' 'x' 'y' 'x×y'⍪size
     p e v q m n←d MICRO(ep+¯1 ¯1↓(1+⍴ep)⍴2⊥⍤1⍉↑r)ee s
     ⎕←50 DMN q m n
-    ⎕←('dc_tex'CSV⍨(↓⍉e),⊂v),'dc_x' 'dc_y'CSD¨m n
+    ⎕←('dc_tex'TEX(↓⍉e),v p),'dc_x' 'dc_y'CSD¨m n
 ⎕←'Creating microstructure input data'
     area←¯3↑mat e vol vuvx vuvy vuvz←r←d MICRO p e v q m n ⋄ ea←↓⍉e
     ⎕←(⍕¨((⊂'mat')('phi1' 'Phi' 'phi2')(⊂'vol'))⍪¨⍪¨10↑¨mat e vol)
@@ -41,4 +42,4 @@ CSD←{⍺CSV⍨↓⍉((⊂'ang'),,/⍕¨q)⍪{⍵⌿⍨(0∨.≠1↓⊢)⍤1⊢
     ⎕←(⊢/size)⍪⍉↑∪¨m.z
 ⎕←'Running simulation of ',(⍕steps),' steps with ',(⍕grains),' grains'
     ⎕←¯10↑¨7↑¨'grains' 'steps' '∆time' 'iter' 'seconds'
-    ⎕←'dc_tex0' 'dc_r' 'dc_tex1' 'dc_f'SIM grains steps ∆t
+    ⎕←'dc_tex0' 'dc_tex1' 'dc_r' 'dc_f'SIM grains steps ∆t
