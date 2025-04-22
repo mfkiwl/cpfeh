@@ -27,9 +27,9 @@
      (ny nx⍴¯1@(∊iq ci∨.>c[_i _c]⍨)_p⊃c)(⍉↑ea)(∆x ∆y)}
  CTF←{da iq ci file←4↑⍵ ⋄ ⍺←⍬ ⋄ _e _y _x _i _c _p←(6 7 8)3 2 10 9 1 ⋄ ∆x←∆y←0        ⍝ read ctf file
      c←⎕CSV('(^\s+)|(\s+$)' '\s+'⎕R'' ','{⍵/⍨{
-             'XStep'≡5↑⍵:0⊣∆x⊢←⊃'^XStep\s+(.*)'⎕S{2⊃⎕VFI⊃↓/⍵.(Offsets,⊂Match)}⍵
-             'YStep'≡5↑⍵:0⊣∆y⊢←⊃'^YStep\s+(.*)'⎕S{2⊃⎕VFI⊃↓/⍵.(Offsets,⊂Match)}⍵
-             ∧/⍵∊⎕D,' .-',⎕UCS 9}¨⍵}⊃⎕NGET file 1)'N' 2 0
+         'XStep'≡5↑⍵:0⊣∆x⊢←⊃'^XStep\s+(.*)'⎕S{2⊃⎕VFI⊃↓/⍵.(Offsets,⊂Match)}⍵
+         'YStep'≡5↑⍵:0⊣∆y⊢←⊃'^YStep\s+(.*)'⎕S{2⊃⎕VFI⊃↓/⍵.(Offsets,⊂Match)}⍵
+         ∧/⍵∊⎕D,' .-',⎕UCS 9}¨⍵}(⎕UCS 10)(≠⊆⊢)80 ¯1⎕MAP file 'R')'N' 2 0
      c←↓⍉c{0∊⍴⍵:⍺ ⋄ x y←∆x ∆y×⍤1↓⍉⍺[;_x _y] ⋄ ⍺⌿⍨∊(x y∧.≥2↑⍵)∧x y∧.<2↓⍵}4↓⍵
      nx ny←(1+⌈/-⌊/)¨c[_x _y] ⋄ ea←(○÷180⍨)da{(⍺÷2)+⍺×⌊⍵÷⍺}⍣(da>0)⊢360|c[_e]
      (ny nx⍴¯1@((∊iq ci∨.>c[_i _c])∨0∘=)_p⊃c)(⍉↑ea)(∆x ∆y)}
@@ -44,18 +44,19 @@
      mi←(2⍴≢gu)⍴⊃⌽mu mi←{u(⍵⍳⍨u←∪⍵)},((↓q)⍳∘.(⌊,⌈)⍨⊣/gu),¨↑(⊂d.D¨⊢)⊢/gu
      r←((⊢⍴⍨2⍴≢)gv)×mi{⍵[⍺]}⍤1⊢(0⍴⍨≢mu){r←⍺ ⋄ r[⍵]+←gv ⋄ r}⍤1⊢mi
      (3↑⍵),{(⊢÷⍤1 0+/)r×⍵[mu[mi]]}¨¯1(↓,(4-≢⍤⊢)⍴↑)4↓⍵}
+ EBF←{'.ctf'≡¯4↑⊃⍵:CTF ⍺,⍵ ⋄ ANG ⍺,⍵}                                                ⍝ ebsd file
  VOL←{pu eu gu gv _ xy←6↑⍵,⊂1 1 ⋄ pu[⊣/gu](eu[⊢/gu;])(gv×⊃×/xy),6↓⍵}                 ⍝ volumes
  MGV←{⍺←1 ⋄ iu ea vu←⍪⌿⍉↑1 1 ⍺×↓⍉↑⍵ ⋄ VOL vu WGT iu ea}                              ⍝ merge volumes
  MGM←{⍺←1 ⋄ q m←↓⍉↑⍵ ⋄ r←0⍴⍨(≢pu←∪⊃⍪/q),1↓⍴⊃m ⋄ pu r⊣q{r[pu⍳⍺;]+←⍵}¨⍺×m}             ⍝ merge misorientations
 
  :If 0=⎕NC'a' ⋄ a←⊢ ⋄ :EndIf
- :If 2=≢⍴w ⋄ r←a DNS w                                               ⍝ d                 ←  d  MICRO  e
- :ElseIf 80=⎕DR⊃w ⋄ r←{'.ctf'≡¯4↑⊃⍵:CTF(3↑a,0),⍵ ⋄ ANG(3↑a,0),⍵}⊆w   ⍝ p e s             ←  a  MICRO  f[crop]
+ :If 2=≢⍴w ⋄ r←a DNS w                                     ⍝ d                 ←     d  MICRO  e
+ :ElseIf 80=⎕DR⊃w ⋄ r←(3↑a,0)EBF⊆w                         ⍝ p e s             ←     a  MICRO  f[crop]
  :ElseIf 1=≢∪⍴¨w ⋄ :Select ≢⊃w
-     :Case 2 ⋄ r←a MGM w                                             ⍝ q m               ← [v] MICRO,⊂q m
-     :Case 3 ⋄ r←a MGV w ⋄ :EndSelect                                ⍝ p e v             ← [v] MICRO,⊂p e v
+     :Case 2 ⋄ r←a MGM w                                   ⍝ q m               ←    [v] MICRO,⊂q m
+     :Case 3 ⋄ r←a MGV w ⋄ :EndSelect                      ⍝ p e v             ←    [v] MICRO,⊂p e v
  :Else ⋄ :Select ≢w
-     :CaseList 4 8 ⋄ r←VOL a DIS⍣(3≠⊃⎕NC'a')WGT ∇ w                  ⍝ p e v[q m n[x y]] ← [[b]d] MICRO  a c i f[crop]
-     :Case 3 ⋄ r←VOL a DIS⍣(3≠⊃⎕NC'a')WGT w                          ⍝ p e v[q m n[x y]] ← [[b]d] MICRO  p e s
-     :Else ⋄ r←a REL w ⋄ :EndSelect                                  ⍝ p e v x y z       ←     d  MICRO  p e v q m[n o]
+     :CaseList 4 8 ⋄ r←VOL a DIS⍣(3≠⊃⎕NC'a')WGT ∇ w        ⍝ p e v[q m n[x y]] ← [[b]d] MICRO  a c i f[crop]
+     :Case 3 ⋄ r←VOL a DIS⍣(3≠⊃⎕NC'a')WGT w                ⍝ p e v[q m n[x y]] ← [[b]d] MICRO  p e s
+     :Else ⋄ r←a REL w ⋄ :EndSelect                        ⍝ p e v x y z       ←     d  MICRO  p e v q m[n o]
  :EndIf

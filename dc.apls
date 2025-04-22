@@ -13,12 +13,12 @@ tol min max conv←1e¯3 1e¯2 100(0.1 0.9 1.1 1.25) ⋄ grains←1000   ⍝ sim
 I←9 0∘⍕ ⋄ D←9 2∘⍕ ⋄ S←9 ¯3∘⍕ ⍝ integer decimal scientific
 SIM←{⍺←⍬ ⋄ o n t←⍵ ⋄ e←o↑¨ea ⋄ v i←o↑¨vol mat ⋄ a←o o∘↑¨area ⋄ _←(e,⊂v)CSV⊃⍺
     r e f←n t bc sr wr st(tol min max CPFEH conv)m[i]e a v⊣ts←⎕TS
-    _←(↓[1]r)(e,⊂v)(,f)CSV¨1↓⍺
-    ⍺,⍨10↑¨(2(I¨⍤↑,S¨⍤↓)⍵),(I¨+⌿¯1↑[2]r),⊂D 1e3÷⍨⎕TS-⍥(12⎕DT⊂)ts}
+    w←(↓[1]r)(e,⊂v)(,f)CSV¨1↓⍺
+    w,⍨10↑¨(2(I¨⍤↑,S¨⍤↓)⍵),(I¨+⌿¯1↑[2]r),⊂D 1e3÷⍨⎕TS-⍥(12⎕DT⊂)ts}
 DMN←{H←{i←⍵ ⋄ (⌊dm÷⍨63.8){⊖⍕(⍉⍕⍪(1↓⌊⍵×m[i;⍳⍺])⍴¨'⎕')(⍉⍕⍪(1↓⌊⍵×n[i;⍳⍺])⍴¨'⎕')}÷k}
     k←⍺ ⋄ q m n←⍵ ⋄ ⍕q,⍪H¨⍳≢q}
-CSV←{f⊣⍺⎕CSV⍠'IfExists' 'Replace'⊢f←⍵,'.csv'}
-CSD←{⍺CSV⍨↓⍉((⊂'ang'),,/⍕¨q)⍪{⍵⌿⍨(0∧.=1↓⊢)⍤1⊢⍵}(dm×1-⍨⍳⊃⌽⍴⍵),⍉⍵}
+CSV←{f←⍵,'.csv' ⋄ 0::0↑⎕←'ERROR ',⍕⎕EN f ⋄ f⊣⍺⎕CSV⍠'IfExists' 'Replace'⊢f}
+CSD←{⍺CSV⍨↓⍉((⊂'ang'),,/⍕¨q)⍪{⍵⌿⍨(0∨.≠1↓⊢)⍤1⊢⍵}(dm×1-⍨⍳⊃⌽⍴⍵),⍉⍵}
 
 ⎕←'Reading ',file
     ep ee s←da iq ci MICRO file 25 25 225 225
