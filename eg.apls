@@ -4,27 +4,27 @@
 ⎕FX⊃⎕NGET'APLSource/MATERIAL.aplf'1
 ⎕FX⊃⎕NGET'APLSource/CPFEH.aplf'1
 
-VOCE←{n←⎕NS⍬ ⋄ n.(sr voce lat)←⍵ ⋄ n}
+VOCE←{n←⎕NS⍬ ⋄ n.(voce lat)←⍵ ⋄ n}
 
-n←1e3                                ⍝ count
-bcc←'materials/fe_bcc.json5'         ⍝ bcc iron
-fcc←'materials/fe_fcc.json5'         ⍝ fcc iron
-bcc1←VOCE 10(575 80 150 40)(1 2)     ⍝ hardening bcc 1
-bcc2←VOCE 10(590 90 100 50)(1 2)     ⍝ hardening bcc 2
-fcc1←VOCE 10(550 70 100 30)(,1)      ⍝ hardening fcc 1
-h←(bcc1 bcc2)fcc1                    ⍝ hardening
-mat←?n⍴≢m←h{⍺ MATERIAL ⍵}¨bcc fcc    ⍝ material
-ea vol←{(2×○?3⍴⊂⍵⍴0)((⊢÷+/)?⍵⍴0)}n   ⍝ texture
-area←{(⍳3){(⊢÷⍤1 0+/)4+?⍵}¨⊂⍵ ⍵⍴0}n  ⍝ topology
+n←1e3                                   ⍝ count
+bcc←'materials/fe_bcc.json5'            ⍝ bcc iron
+fcc←'materials/fe_fcc.json5'            ⍝ fcc iron
+bcc1←VOCE(575 80 150 40)(1 2)           ⍝ hardening bcc 1
+bcc2←VOCE(590 90 100 50)(1 2)           ⍝ hardening bcc 2
+fcc1←VOCE(550 70 100 30)(,1)            ⍝ hardening fcc 1
+h←(bcc1 bcc2)fcc1 ⋄ hsr←10              ⍝ hardening
+mat←?n⍴≢m←h{hsr(⍺ MATERIAL)⍵}¨bcc fcc   ⍝ material
+ea vol←{(2×○?3⍴⊂⍵⍴0)((⊢÷+/)?⍵⍴0)}n      ⍝ texture
+area←{(⍳3){(⊢÷⍤1 0+/)4+?⍵}¨⊂⍵ ⍵⍴0}n     ⍝ topology
 
-bc←0 1 1 0 0 0                       ⍝ stress bcs
-sr←1e¯3,5⍴0                          ⍝ strain rate
-wr←0                                 ⍝ angular velocity
-st←6⍴0                               ⍝ stress
-tol←1e¯3                             ⍝ tolerance
-min←1e¯2                             ⍝ min time increment
-max←50                               ⍝ max iterations
-conv←0.1 0.9 1.1 1.25                ⍝ down up inc dec
+bc←0 1 1 0 0 0                          ⍝ stress bcs
+sr←1e¯3,5⍴0                             ⍝ strain rate
+wr←0                                    ⍝ angular velocity
+st←6⍴0                                  ⍝ stress
+tol←1e¯3                                ⍝ tolerance
+min←1e¯2                                ⍝ min time increment
+max←50                                  ⍝ max iterations
+conv←0.1 0.9 1.1 1.25                   ⍝ down up inc dec
 
 I←9 0∘⍕ ⋄ D←9 2∘⍕ ⋄ S←9 ¯3∘⍕ ⍝ integer decimal scientific
 SIM←{

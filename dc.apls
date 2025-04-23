@@ -7,11 +7,11 @@
 
 VOCE←{n←⎕NS⍬ ⋄ n.(sr voce lat)←⍵ ⋄ n}
 
-bcc←'materials/fe_bcc.json5' ⋄ khp←20 ⋄ voce←2⍴⊂600 80 150 40     ⍝ material
+bcc←'materials/fe_bcc.json5' ⋄ khp←20 ⋄ hsr←10                    ⍝ material
+hrd←((575 80 150 40)(1 2))((590 90 100 50)(2 1))                  ⍝ hardening
 da iq ci dm b←10 100 0.01 1.25 15 ⋄ file←'dc06rdnd.ctf'           ⍝ microstruture
 bc sr wr st ∆t steps←(0 1 1 0 0 0)(1e¯3,5⍴0)0(6⍴0)0.25 1000       ⍝ boundary conditions
 tol min max conv←1e¯3 1e¯2 100(0.1 0.9 1.1 1.25) ⋄ grains←1000    ⍝ simulation parameters
-bcc1 bcc2←VOCE¨(10(575 80 150 40)(1 2))(10(590 90 100 50)(2 1))   ⍝ hardening bcc 2
 
 I←11 0∘⍕ ⋄ D←11 5∘⍕ ⋄ S←11 ¯5∘⍕ ⍝ integer decimal scientific
 SIM←{o n t←⍵ ⋄ e←o↑¨ea ⋄ v i←o↑¨vol mat ⋄ a←o o∘↑¨area ⋄ _←(⊃⍺)TEX e,v i
@@ -43,7 +43,8 @@ TEX←{⍺CSV⍨(⊂¨'phi1' 'Phi' 'phi2' 'vol' 'phase'),¨⍵}
     ⎕←(⍕¨((⊂'mat')('phi1' 'Phi' 'phi2')(⊂'vol'))⍪¨⍪¨10↑¨mat e vol)
     ⎕←≢vol
 ⎕←'Creating material input data'
-    m←{⍵ MATERIAL bcc}¨(khp÷(⊢/size)*÷2){m←⎕NS¨⍵ ⋄ m.voce+←⊂4↑⍺ ⋄ m}¨⊂bcc1 bcc2
+    s←khp÷(⊢/size)*÷2 ⋄ h←{n←⎕NS⍬ ⋄ n.(voce lat)←⍵ ⋄ n}¨hrd
+    m←{hsr(⍵ MATERIAL)bcc}¨s{m←⎕NS¨⍵ ⋄ m.voce+←⊂4↑⍺ ⋄ m}¨⊂h
     ⎕←(⊢/size)⍪⍉↑∪¨m.H 0
 ⎕←'Running simulation of ',(⍕steps),' steps with ',(⍕grains),' grains'
     ⎕←'Finished in ','dc_tex0' 'dc_tex1' 'dc_r' 'dc_f'SIM grains steps ∆t
