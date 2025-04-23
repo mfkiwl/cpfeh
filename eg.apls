@@ -23,7 +23,7 @@ conv←0.1 0.9 1.1 1.25                ⍝ down up inc dec
 I←9 0∘⍕ ⋄ D←9 2∘⍕ ⋄ S←9 ¯3∘⍕ ⍝ integer decimal scientific
 SIM←{
     ⍺←⍬ ⋄ o n t←⍵ ⋄ e←o↑¨ea ⋄ v i←o↑¨vol mat ⋄ a←o o∘↑¨area
-    r e f←n t bc sr wr st(tol min max CPFEH conv)m[i]e a v⊣ts←⎕TS
+    r e f←n t bc sr wr st(tol min max conv CPFEH⊢)m[i]e a v⊣ts←⎕TS
     _←(↓[1]r)(e,⊂v)(,f)⎕CSV⍠'IfExists' 'Replace'¨⍣(~0∊⍴⍺)⊢⍺
     ⍺,⍨10↑¨(2(I¨⍤↑,S¨⍤↓)⍵),(I¨+⌿¯1↑[2]r),⊂D 1e3÷⍨⎕TS-⍥(12⎕DT⊂)ts
 }

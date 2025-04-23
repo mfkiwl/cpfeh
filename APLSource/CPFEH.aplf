@@ -19,13 +19,13 @@
          ∆u∘←(e-eu)+(↓[1]jv)+.×s-su ⋄ d ⍺⍺¨←(x∘←⌈/⍤|¨∆(⌈/⍤|¨∆u)),¨⍥⌽x                        ⍝   local error and factor
          (su+⊃d+.×(bu+.×j⌹⍨∆)(↓[1](j+⍤2⊢jv)⌹⍨⍤¯1↑[÷2]∆u))bu x d                              ⍝   correction
      }⍣{(÷max>i∘←i+1)∧tol∧.>x÷t×⌈/|vo:tol>⌈/∊|bu(-÷{⌈/∊|⍵})2⊃⍵ ⋄ 0}∘{i∘←0 ⋄ ⍵,tol,conv[2]}
-     (tol min max)conv←⍺⍺ ⍵⍵ ⋄ n t bo vo wo so←⍺ ⋄ m←∪⊃mat ea area vol←4↑⍵ ⋄ g hs←m.g m.hs   ⍝ parameters
+     tol min max conv←⍺⍺ ⋄ n t bo vo wo so←⍺ ⋄ m←∪⊃mat ea area vol←4↑⍵ ⋄ g hs←m.g m.hs       ⍝ parameters
      iu vuvd vu ru∘←{⍺[⍵](⍵ ⍵∘⌷¨(⊢÷⍤¯1+/)¨area)((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}∘⍋⍨m⍳mat           ⍝ microstructure
      ku ssu∘←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu∘←+_ ssu           ⍝ behaviour
      at ae as au asu tsu fu∘←7↑(≢vu){0(6⍴0)(6⍴0)(↓6 ⍺⍴0)0 m.z(i3×⊂⍺⍴1)}⍣(4=≢⍵)⊢4↓⍵           ⍝ initialise
-     su bu∘←(≢vu){(↓6 ⍺⍴0)i6}⍣(13≠≢⍵)⊢11↓⍵ ⋄ (E ru)fu,⍨⊂{bs∘←bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu        ⍝ simulation
+     su bu∘←(≢vu){(↓6 ⍺⍴0)i6}⍣(13≠≢⍵)⊢11↓⍵ ⋄ (E ru)fu,⍨⊂⍵⍵{bs∘←bd×⊂¨(⊢÷+/)1⌽2×/4⍴1 1⍉fu      ⍝ simulation
          su bu i∘←((2×so)-vu+.×⍨↑au)t{min>⊃⌽⍺:⍵ ⋄ 11::(⍺÷2)∇⍣2⊢⍵+0 0 i                       ⍝   divide & conquer
              at ae as au+←t e s,1↑su bu←⍺ S 2↑⍵ ⋄ su bu(i+⊃⌽⍵)}su bu 0                       ⍝   solve stress
          tsu+←m.(⊃H/)↓⍉↑asu(t×esu) ⋄ asu+←t×|esu ⋄ fu+.×⍨←i3+t T ssu×⍤¯1⊢esu ⋄ ru W←⊂esu     ⍝   update
-         ⍵⍪at,ae,as,i}⍣n⊢1 14⍴0
+         ⍵⍪(⍺⍺⊢⊢)at,ae,as,i}⍣n⊢1 14⍴0
  }
