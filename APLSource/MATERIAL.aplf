@@ -1,6 +1,9 @@
- MATERIAL←{⍺←1
-     VOCE←{a b c←1↓⍺⍺ ⋄ (c×⍵)-(c×e×(d×1+f×⍺+⍵)-1+f×⍺)+(c-⍨f×a)×(e←(*-f×⍺)÷f)×1-⍨d←*-⍵×f←|b÷a}
-     j←0 ⎕JSON⍠'Dialect' 'JSON5'⊃⎕NGET ⍵ ⋄ m n b←{(,/(≢∘⊃¨⍵.n)⍴¨⍳≢⍵),⊃,¨¨/⍵.(n b)}j.SlipSystems
-     h←j.Hardening[m] ⋄ s←⎕NS ⍬ ⋄ s.(g hs k ss)←1 h.sr(⌹↑j.Stiffness)(n∘.×⍥(⊢÷(÷2)*⍨+.×⍨)b)
-     s.z←⍺×⊃¨h.voce ⋄ s.H←⍺×⊣(↓⍉↑h.voce)VOCE(↑{⍵.lat[m]}¨h)+.×∘|⊢ ⋄ s
+ MATERIAL←{⍺←⊢
+     VOCE←{u0 u1 h0 h1←⍺⍺ ⋄ 0=⎕NC'⍺':u0+(u1+h1×⍵)×1-*-⍵×|h0÷u1
+        (h1×⍵)-(h1×c×(b×1+a×⍺+⍵)-1+a×⍺)+(h1-⍨a×u1)×(c←(*-a×⍺)÷a)×1-⍨b←*-⍵×a←|h0÷u1}
+     j←0 ⎕JSON⍠'Dialect' 'JSON5'⊃⎕NGET ⍵
+     m n b←{(,/(≢∘⊃¨⍵.n)⍴¨⍳≢⍵),⊃,¨¨/⍵.(n b)}j.SlipSystems
+     s←⎕NS ⍬ ⋄ s.(g k ss)←1(⌹↑j.Stiffness)(n∘.×⍥(⊢÷(÷2)*⍨+.×⍨)b)
+     (,⍺⍺){2::⍵ ⋄ 3=⎕NC'⍺⍺':⍵.H←⍺⍺
+        h←⍺⍺[m] ⋄ ⍵.hs←h.sr ⋄ ⍵.H←(↓⍉↑h.voce)VOCE∘((↑{⍵.lat[m]}¨⍺⍺[m])+.×∘|⊢)}s
  }
