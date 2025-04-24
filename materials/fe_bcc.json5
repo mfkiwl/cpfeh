@@ -1,8 +1,4 @@
 {
-    Hardening:[
-        {sr:10, voce:[575,80,150,40], lat:[1,2,]},
-        {sr:10, voce:[590,90,100,50], lat:[2,1,]},
-    ],
     SlipSystems:[
         {
             b:[
