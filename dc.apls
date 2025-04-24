@@ -5,8 +5,6 @@
 ⎕FX⊃⎕NGET'APLSource/MICRO.aplf'1
 ⎕FX⊃⎕NGET'APLSource/CPFEH.aplf'1
 
-VOCE←{n←⎕NS⍬ ⋄ n.(sr voce lat)←⍵ ⋄ n}
-
 bcc←'materials/fe_bcc.json5' ⋄ khp←20 ⋄ hsr←10                    ⍝ material
 hrd←((575 80 150 40)(1 2))((590 90 100 50)(2 1))                  ⍝ hardening
 da iq ci dm b←10 100 0.01 1.25 15 ⋄ file←'dc06rdnd.ctf'           ⍝ microstruture
