@@ -10,23 +10,22 @@
          r w}{⊃⊃⍺⍺/(⍳3),⊂(6 6⍴≠⍨⊃⍵)⍵}{(⍺⍺⍉⍺)+.×⍵+.×⍵⍵×⍺⍺ ⍺}(⊃⍪⌿,/3 3∘⍴¨2 2⍴1 0.5 2 1)
      W←{w←0 1 ¯1 1 0 ¯1 1 ¯1 0×(0,⍨(3↓t T(-_ ssu)×⍤¯1⊢⍵)-⍺+.×wo+.×⍉⍺)[9⍴⌽⍳4]                 ⍝ rotate orientation matrices
          ⍺+.×i3+(w×1○u)+w+.×(w←w÷u)×1-2○u←(÷2)*⍨+/1 1⍉w←↑(÷2)×(⊢×3-+.×⍨)¨↓3 3⍴w}
-     S←2↑{b⌈t⌊⍺×i(÷⊢/b t i d←conv)[1+>/⍵]}{so t←⍺ ⋄ su bu x d∘←⍵                             ⍝ grain stress
+     S←⊃{b⌈t⌊⍺×i(÷⊢/b t i d←conv)[1+>/⍵]}{so t←⍺ ⋄ su x d∘←⍵                                 ⍝ grain stress
          esu∘←g×(××hs*⍨|)rsu∘←(msu÷⍤¯1⊢tsu)+.×⍤1⊂¨iu⊆[1]↑[÷2]au+su                           ⍝   local slip shear
          ju∘←,⌿ku+t×+/↑(tsu÷⍨⍤0 2∘.×⍤1⍨msu)×⍤¯1⊢hs×g×(××(hs-1)*⍨|)rsu                        ⍝   local behaviour
-         bu∘←{kb:⍵ ⋄ (↓[1]+.×∘⌹vu+.×⊢)↑[÷2]i6-+⌿(↑bs)+.×⍤2⊢vuvd∘.(+.×)i6-⍵}bu                ⍝   localisation
          jv∘←(i6-⍤2⊢+.×j⌹⍨vu+.×i6-⍤2⊢)((j←vu+.×⍨↑ju+.×bu)+.×i6∘-⌹⊢)⍤2↑[÷2]bu                 ⍝   interaction
          ∆←⊃bo(~bo)(⊢+j+.×⊣).×so(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu∘←(su+.×⍨,⌿ku)+t T msu×⍤¯1⊢esu)   ⍝   global error
          ∆u∘←(e-eu)+(↓[1]jv)+.×s-su ⋄ d ⍺⍺¨←(x∘←⌈/⍤|¨∆(⌈/⍤|¨∆u)),¨⍥⌽x                        ⍝   local error and factor
-         (su+⊃d+.×(bu+.×j⌹⍨∆)(↓[1](j+⍤2⊢jv)⌹⍨⍤¯1↑[÷2]∆u))bu x d                              ⍝   correction
-     }⍣{(÷max>i∘←i+1)∧tol∧.>x÷t×⌈/|vo:tol>⌈/∊|bu(-÷{⌈/∊|⍵})2⊃⍵ ⋄ 0}∘{i∘←0 ⋄ ⍵,tol,conv[2]}
+         (su+⊃d+.×(bu+.×j⌹⍨∆)(↓[1](j+⍤2⊢jv)⌹⍨⍤¯1↑[÷2]∆u))x d                                 ⍝   correction
+     }⍣{(÷max>i∘←i+1)∧tol∧.>x÷t×⌈/|vo}∘{i∘←0 ⋄ ⍵ tol,conv[2]}
+     B←{tol>⌈/|∊⍺-⍵:0 ⍺ bu ⋄ 1 ⍵((↓+.×∘⌹vu+.×⍨⊢)↑i6-+⌿(↑bd×⊂¨⍵)+.×⍤2⊢vuvd∘.(+.×)i6-bu)}      ⍝ localisation
      tol min max conv←⍺⍺ ⋄ n t bo vo wo so←⍺ ⋄ m←∪⊃mat ea area vol←4↑⍵ ⋄ g hs←m.g m.hs       ⍝ parameters
      iu vuvd vu ru∘←{⍺[⍵](⍵ ⍵∘⌷¨(⊢÷⍤¯1+/)¨area)((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}∘⍋⍨m⍳mat           ⍝ microstructure
      at ae as au asu tsu fu∘←7↑(≢vu){0(6⍴0)(6⍴0)(↓6 ⍺⍴0)0(m.H 0)(i3×⊂⍺⍴1)}⍣(4=≢⍵)⊢4↓⍵        ⍝ initialise
-     su bu∘←(≢vu){(↓6 ⍺⍴0)(i6÷2)}⍣(13≠≢⍵)⊢11↓⍵ ⋄ vdu←0 ⋄ (E ru)fu,⍨⊂⍵⍵{                          ⍝ simulation
+     su bu∘←(≢vu){(↓6 ⍺⍴0)(i6÷2)}⍣(13≠≢⍵)⊢11↓⍵ ⋄ vdu←0 ⋄ (E ru)fu,⍨⊂⍵⍵{                      ⍝ simulation
          ku ssu∘←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu∘←+_ ssu       ⍝   behaviour
-         vdu bs∘←vdu{kb∘←tol>⌈/|∊⍺-⍵:⍺ bs ⋄ ⍵(bd×⊂¨⍵)}(⊢÷+/)1⌽2×/4⍴1 1⍉fu                    ⍝   shape
-         su bu i∘←((2×so)-vu+.×⍨↑au)t{min>⊃⌽⍺:⍵ ⋄ 11::(⍺÷2)∇⍣2⊢⍵+0 0 i                       ⍝   divide & conquer
-             at ae as au+←t e s,1↑su bu←⍺ S 2↑⍵ ⋄ su bu(i+⊃⌽⍵)}su bu 0                       ⍝   solve stress
+         ib vdu bu∘←vdu B(⊢÷+/)1⌽2×/4⍴1 1⍉fu ⋄ su i∘←((2×so)-vu+.×⍨↑au)t{min>⊃⌽⍺:⍵           ⍝   localisation
+             11::(⍺÷2)∇⍣2⊢⍵+0 i ⋄ at ae as au+←t e s(su←⍺ S⊃⍵) ⋄ su(i+⊃⌽⍵)}su 0              ⍝   solve stress
          tsu+←m.(⊃H/)↓⍉↑asu(t×esu) ⋄ asu+←t×|esu ⋄ fu+.×⍨←i3+t T ssu×⍤¯1⊢esu ⋄ ru W←⊂esu     ⍝   update
-         ⍵⍪(⍺⍺⊢⊢)at,ae,as,i,~kb}⍣n⊢1 15⍴0
+         ⍵⍪(⍺⍺⊢⊢)at,ae,as,i,ib}⍣n⊢1 15⍴0
  }
