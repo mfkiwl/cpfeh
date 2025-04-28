@@ -18,14 +18,14 @@
          ∆u∘←(e-eu)+(↓[1]jv)+.×s-su ⋄ d ⍺⍺¨←(x∘←⌈/⍤|¨∆(⌈/⍤|¨∆u)),¨⍥⌽x                        ⍝   local error and factor
          (su+⊃d+.×(bu+.×j⌹⍨∆)(↓[1](j+⍤2⊢jv)⌹⍨⍤¯1↑[÷2]∆u))x d                                 ⍝   correction
      }⍣{(÷max>i∘←i+1)∧tol∧.>x÷t×⌈/|vo}∘{i∘←0 ⋄ ⍵ tol,conv[2]}
-     B←{tol>⌈/|∊⍺-⍵:0 ⍺ bu ⋄ 1 ⍵((↓+.×∘⌹vu+.×⍨⊢)↑i6-+⌿(↑bd×⊂¨⍵)+.×⍤2⊢vuvd∘.(+.×)i6-bu)}      ⍝ localisation
      tol min max conv←⍺⍺ ⋄ n t bo vo wo so←⍺ ⋄ m←∪⊃mat ea area vol←4↑⍵ ⋄ g hs←m.g m.hs       ⍝ parameters
      iu vuvd vu ru∘←{⍺[⍵](⍵ ⍵∘⌷¨(⊢÷⍤¯1+/)¨area)((⊢÷+/)vol[⍵])(M(⊂⊂⍵)⌷¨ea)}∘⍋⍨m⍳mat           ⍝ microstructure
      at ae as au asu tsu fu∘←7↑(≢vu){0(6⍴0)(6⍴0)(↓6 ⍺⍴0)0(m.H 0)(i3×⊂⍺⍴1)}⍣(4=≢⍵)⊢4↓⍵        ⍝ initialise
-     su bu∘←(≢vu){(↓6 ⍺⍴0)(i6÷2)}⍣(13≠≢⍵)⊢11↓⍵ ⋄ vdu←0 ⋄ (E ru)fu,⍨⊂⍵⍵{                      ⍝ simulation
+     su bu∘←(≢vu){(↓6 ⍺⍴0)(i6÷2)}⍣(13≠≢⍵)⊢11↓⍵ ⋄ vdu←0 ⋄ (E ru)fu,⍨⊂{                        ⍝ simulation
+         tol>⌈/|∊⍺-⍵:0 ⍺ bu ⋄ 1 ⍵((↓+.×∘⌹vu+.×⍨⊢)↑i6-+⌿(↑bd×⊂¨⍵)+.×⍤2⊢vuvd∘.(+.×)i6-bu)}{    ⍝   localisation
          ku ssu∘←m{((↑⍺.k)R⍨⍤2⊢⍵)((↑⍺.ss)(⊢+.×+.×∘⍉)⍤2⊂¨⍵)}iu⊆[1]↑[÷2]ru ⋄ msu∘←+_ ssu       ⍝   behaviour
-         ib vdu bu∘←vdu B(⊢÷+/)1⌽2×/4⍴1 1⍉fu ⋄ su i∘←((2×so)-vu+.×⍨↑au)t{min>⊃⌽⍺:⍵           ⍝   localisation
+         ib vdu bu∘←vdu ⍺⍺(⊢÷+/)1⌽2×/4⍴1 1⍉fu ⋄ su i∘←((2×so)-vu+.×⍨↑au)t{min>⊃⌽⍺:⍵          ⍝   localisation
              11::(⍺÷2)∇⍣2⊢⍵+0 i ⋄ at ae as au+←t e s(su←⍺ S⊃⍵) ⋄ su(i+⊃⌽⍵)}su 0              ⍝   solve stress
          tsu+←m.(⊃H/)↓⍉↑asu(t×esu) ⋄ asu+←t×|esu ⋄ fu+.×⍨←i3+t T ssu×⍤¯1⊢esu ⋄ ru W←⊂esu     ⍝   update
-         ⍵⍪(⍺⍺⊢⊢)at,ae,as,i,ib}⍣n⊢1 15⍴0
+         ⍵⍪(⍵⍵⊢⊢)at,ae,as,i,ib}⍵⍵⍣n⊢1 15⍴0
  }
