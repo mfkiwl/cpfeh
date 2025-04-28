@@ -13,7 +13,7 @@
      S←⊃{b⌈t⌊⍺×i(÷⊢/b t i d←conv)[1+>/⍵]}{so t←⍺ ⋄ su x d∘←⍵                                 ⍝ grain stress
          esu∘←g×(××hs*⍨|)rsu∘←(msu÷⍤¯1⊢tsu)+.×⍤1⊂¨iu⊆[1]↑[÷2]au+su                           ⍝   local slip shear
          ju∘←,⌿ku+t×+/↑(tsu÷⍨⍤0 2∘.×⍤1⍨msu)×⍤¯1⊢hs×g×(××(hs-1)*⍨|)rsu                        ⍝   local behaviour
-         jv∘←(i6-⍤2⊢+.×j⌹⍨vu+.×i6-⍤2⊢)((j←vu+.×⍨↑ju+.×bu)+.×i6∘-⌹⊢)⍤2↑[÷2]bu                 ⍝   interaction
+         jv∘←(i6-⍤2⊢+.×∘⌹vu+.×i6-⍤2⊢)((j←vu+.×⍨↑ju+.×bu)+.×i6∘-⌹⊢)⍤2↑[÷2]bu                  ⍝   interaction
          ∆←⊃bo(~bo)(⊢+j+.×⊣).×so(vo×t)-s e∘←(vu+.×⍨↑)¨su(eu∘←(su+.×⍨,⌿ku)+t T msu×⍤¯1⊢esu)   ⍝   global error
          ∆u∘←(e-eu)+(↓[1]jv)+.×s-su ⋄ d ⍺⍺¨←(x∘←⌈/⍤|¨∆(⌈/⍤|¨∆u)),¨⍥⌽x                        ⍝   local error and factor
          (su+⊃d+.×(bu+.×j⌹⍨∆)(↓[1](j+⍤2⊢jv)⌹⍨⍤¯1↑[÷2]∆u))x d                                 ⍝   correction
