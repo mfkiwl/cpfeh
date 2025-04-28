@@ -31,10 +31,10 @@ SIM←{
     ⍺←⍬ ⋄ o n t←⍵ ⋄ e←o↑¨ea ⋄ v i←o↑¨vol mat ⋄ a←o o∘↑¨area
     r e f←n t bc sr wr st(tol min max conv CPFEH⊢)m[i]e a v⊣ts←⎕TS
     _←(↓[1]r)(e,⊂v)(,f)⎕CSV⍠'IfExists' 'Replace'¨⍣(~0∊⍴⍺)⊢⍺
-    ⍺,⍨10↑¨(2(I¨⍤↑,S¨⍤↓)⍵),(I¨+⌿¯1↑[2]r),⊂D 1e3÷⍨⎕TS-⍥(12⎕DT⊂)ts
+    ⍺,⍨10↑¨(2(I¨⍤↑,S¨⍤↓)⍵),(I¨+⌿¯2↑[2]r),⊂D 1e3÷⍨⎕TS-⍥(12⎕DT⊂)ts
 }
 
-⎕←¯10↑¨7↑¨'grains' 'steps' '∆time' 'iter' 'seconds'
+⎕←¯10↑¨7↑¨'grains' 'steps' '∆time' 'iter' 'iterb' 'seconds'
 ⎕←SIM  50  50 0.25
 ⎕←SIM  50 100 0.25
 ⎕←SIM 100 100 0.25
